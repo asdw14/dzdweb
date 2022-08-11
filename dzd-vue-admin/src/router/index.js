@@ -34,7 +34,7 @@ export const constantRoutes = [
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '谷粒学院后台首页', icon: 'dashboard' }
+      meta: { title: '弟中弟资源共享后台首页', icon: 'dashboard' }
     }]
   }]
 /**
@@ -132,6 +132,35 @@ export const asyncRoutes = [
         name: 'EduCoursePublishEdit',
         component: () => import('@/views/edu/course/publish'),
         meta: { title: '发布课程', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+
+  {
+    path: '/article',
+    component: Layout,
+    redirect: '/article/list',
+    name: '帖子管理',
+    meta: { title: '帖子管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: '课程列表',
+        component: () => import('@/views/dzd/article/list'),
+        meta: { title: '课程列表', icon: 'table' }
+      },
+      {
+        path: 'info',
+        name: '添加帖子',  
+        component: () => import('@/views/dzd/article/info'),
+        meta: { title: '添加课程', icon: 'tree' }
+      },
+      {
+        path: 'info/:id',
+        name: 'EduCourseInfoEdit',
+        component: () => import('@/views/dzd/article/info'),
+        meta: { title: '编辑帖子基本信息', noCache: true },
         hidden: true
       }
     ]
