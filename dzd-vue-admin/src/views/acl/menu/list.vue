@@ -138,10 +138,10 @@ export default {
     return {
       filterText: '',
       menuList: [],
-      defaultProps: {
-        children: 'children',
-        label: 'name'
-      },
+      // defaultProps: {
+      //   children: 'children',
+      //   label: 'name'
+      // },
       dialogFormValue: '添加菜单',
       dialogFormVisible: false,
       dialogPermissionVisible: false,

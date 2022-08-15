@@ -1,60 +1,45 @@
 import request from '@/utils/request'
 
-const api_name = '/admin/article'
+const api_name = '/admin/dzd/article'
 
 export default {
     //添加文章信息
-    saveCourseInfo(courseInfo){
+    saveOrPush(articleInfo){
         return request({
-            url : `${api_name}/addCourseInfo`,
+            url : `${api_name}/saveOrPush`,
             method: 'post',
-            data : courseInfo
+            data : articleInfo
         })
 
     },
 
-    // 获取课程基本信息
-    getCourseInfoById(id){
+    // 获取文章基本信息
+    getArticleInfoById(id){
         return request({                    
-            url : `${api_name}/courseInfo/${id}`,
+            url : `${api_name}/articleInfo/${id}`,
             method: 'get',
         })
 
     },
 
-    //修改课程信息
-    updateCourseInfo(courseInfo){
+    //修改文章信息
+    updateArticleInfo(id,articleInfo){
         return request({
-            url : `${api_name}/updateCourseInfo`,
-            method: 'post',
-            data : courseInfo
+            url : `${api_name}/update/${id}`,
+            method: 'put',
+            data : articleInfo
         })
 
     },
 
-    //通过id获取课程最终发布信息
-    getCoursePublishInfoById(id) {
+      //根据id修改发布状态，发布改为未发布，未发布改为发布                 
+      statusById(id){
         return request({
-          url: `${api_name}/coursePublishInfo/${id}`,
-          method: 'get'
-        })
-      },
-
-      //根据id发布课程
-      publishCourse(id){
-        return request({
-            url: `${api_name}/publishCourse/${id}`,
+            url: `${api_name}/statusById/${id}`,
             method: 'put'
           })
       },
 
-      //课程列表
-      list(){
-        return request({
-            url : `${api_name}/listCourse`,
-            method :'get'
-        })
-      },
 
     //文章列表分页查询
     getPageList(page,limit,searchObj){

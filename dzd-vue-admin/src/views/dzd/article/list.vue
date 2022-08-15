@@ -67,7 +67,7 @@
     </template>
   </el-table-column>
 
-  <el-table-column label="课程信息" width="470" align="center">
+  <el-table-column label="文章标题" width="300" align="center">
     <template slot-scope="scope">
       <div class="info">
         <div class="title">
@@ -79,37 +79,45 @@
     </template>
   </el-table-column>
 
-  <el-table-column label="创建时间" align="center">
-    <template slot-scope="scope">
-      {{ scope.row.gmtCreate.substr(0, 10) }}
-    </template>
-  </el-table-column>
   <el-table-column label="发布时间" align="center">
     <template slot-scope="scope">
       {{ scope.row.gmtModified.substr(0, 10) }}
     </template>
   </el-table-column>
+
+    <el-table-column label="发布状态" align="center">
+    <template slot-scope="scope">
+      {{ scope.row.status == 'Normal' ? "已发布" : "未发布" }}
+    </template>
+  </el-table-column>
+
   <el-table-column label="价格" width="100" align="center" >
     <template slot-scope="scope">
       {{ Number(scope.row.price) === 0 ? '免费' :
       '¥' + scope.row.price.toFixed(2) }}
     </template>
   </el-table-column>
-  <el-table-column prop="buyCount" label="付费学员" width="100" align="center" >
+  <el-table-column prop="buyCount" label="购买次数" width="100" align="center" >
     <template slot-scope="scope">
       {{ scope.row.buyCount }}人
     </template>
   </el-table-column>
 
-  <el-table-column label="操作" width="150" align="center">
+    <el-table-column prop="buyCount" label="浏览次数" width="100" align="center" >
     <template slot-scope="scope">
-      <router-link :to="'/edu/course/info/'+scope.row.id">
-        <el-button type="text" size="mini" icon="el-icon-edit">编辑课程信息</el-button>
-      </router-link>
-      <router-link :to="'/edu/course/chapter/'+scope.row.id">
-        <el-button type="text" size="mini" icon="el-icon-edit">编辑课程大纲</el-button>
+      {{ scope.row.viewCount }}人
+    </template>
+  </el-table-column>
+
+  <el-table-column label="操作" width="350" align="center">
+    <template slot-scope="scope">
+      <router-link :to="'/dzd/article/info/'+scope.row.id">
+        <el-button type="text" size="mini" icon ="el-icon-edit">编辑文章信息</el-button>
       </router-link>
       <el-button type="text" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
+      <el-button type="text" size="mini" icon="el-icon-s-tools" @click="statusById(scope.row.id)">
+      {{scope.row.status == 'Draft' ? "上线文章" : "下线文章"}}  
+      </el-button>
     </template>
   </el-table-column>
 </el-table>
@@ -126,9 +134,8 @@
   </div>
 </template>
 <script>
-  import course from '@/api/dzd/article'
-  import teacher from '@/api/edu/teacher'
-import subject from '@/api/edu/subject'
+import article from '@/api/dzd/article'
+
   export default{
       data(){
           return{
@@ -136,7 +143,7 @@ import subject from '@/api/edu/subject'
             list: null, // 数据列表
             total: 0, // 总记录数
             page: 1, // 页码
-            limit: 10, // 每页记录数
+            limit: 5, // 每页记录数
             searchObj: {},// 查询条件
           }
       },
@@ -157,9 +164,25 @@ import subject from '@/api/edu/subject'
                 this.list = response.data.items
                 this.total = response.data.total
                 this.listLoading = false
+              console.log(this.list)
+
             })
         },
 
+    tatusById(id){
+        article.statusById(id).then(response =>{
+            this.$message({
+                type: 'success',
+                message: '修改成功!'
+        })
+          this.getPageList()
+        }).catch((response) => {
+            this.$message({
+                type: 'error',
+                message: response.message
+            })
+        })
+    },
 
       //清空
       resetData(){
