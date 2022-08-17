@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-const api_name = '/eduservice/subject'
+const api_name = '/admin/dzd/subject'
 
 export default{
     getNestedTreeList(){

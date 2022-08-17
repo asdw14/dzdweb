@@ -5,7 +5,7 @@
 
   <!-- 所属分类：级联下拉列表 -->
   <!-- 一级分类 -->
-  <el-form-item label="课程类别">
+  <el-form-item label="文章类别">
     <el-select
       v-model="searchObj.subjectParentId"
       placeholder="请选择"
@@ -31,18 +31,6 @@
   <el-form-item>
     <el-input v-model="searchObj.title" placeholder="文章标题"/>
   </el-form-item>
-  <!-- 讲师 -->
-  <el-form-item>
-    <el-select
-      v-model="searchObj.teacherId"
-      placeholder="请选择讲师">
-      <el-option
-        v-for="teacher in teacherList"
-        :key="teacher.id"
-        :label="teacher.name"
-        :value="teacher.id"/>
-    </el-select>
-  </el-form-item>
 
   <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
   <el-button type="default" @click="resetData()">清空</el-button>
@@ -66,7 +54,11 @@
       {{ (page - 1) * limit + scope.$index + 1 }}
     </template>
   </el-table-column>
-
+  <el-table-column label="发布人" align="center">
+    <template slot-scope="scope">
+          管理员
+    </template>
+  </el-table-column>
   <el-table-column label="文章标题" width="300" align="center">
     <template slot-scope="scope">
       <div class="info">
@@ -94,18 +86,18 @@
   <el-table-column label="价格" width="100" align="center" >
     <template slot-scope="scope">
       {{ Number(scope.row.price) === 0 ? '免费' :
-      '¥' + scope.row.price.toFixed(2) }}
+      '$' + scope.row.price.toFixed(0) }}
     </template>
   </el-table-column>
   <el-table-column prop="buyCount" label="购买次数" width="100" align="center" >
     <template slot-scope="scope">
-      {{ scope.row.buyCount }}人
+      {{ scope.row.buyCount }}次
     </template>
   </el-table-column>
 
     <el-table-column prop="buyCount" label="浏览次数" width="100" align="center" >
     <template slot-scope="scope">
-      {{ scope.row.viewCount }}人
+      {{ scope.row.viewCount }}次
     </template>
   </el-table-column>
 
@@ -135,6 +127,8 @@
 </template>
 <script>
 import article from '@/api/dzd/article'
+import subject from '@/api/dzd/subject'
+
 
   export default{
       data(){
@@ -143,8 +137,11 @@ import article from '@/api/dzd/article'
             list: null, // 数据列表
             total: 0, // 总记录数
             page: 1, // 页码
-            limit: 5, // 每页记录数
-            searchObj: {},// 查询条件
+            limit: 10, // 每页记录数
+            searchObj: {},// 查询条件、
+            key :0,
+            subjectNestedList: [], // 一级分类列表
+            subSubjectList: [] // 二级分类列表,
           }
       },
       created(){
@@ -152,8 +149,10 @@ import article from '@/api/dzd/article'
       },
     methods:{
         fetchData(){
-            //获取课程列表分页
+            //获取文章列表分页
             this.getPageList()
+            // 初始化分类列表
+          this.initSubjectList()
         },
     
         // 条件查询带分页
@@ -164,18 +163,31 @@ import article from '@/api/dzd/article'
                 this.list = response.data.items
                 this.total = response.data.total
                 this.listLoading = false
-              console.log(this.list)
-
             })
         },
+      // 初始化分类列表
+      initSubjectList(){
+        subject.getNestedTreeList().then(response=>{
+            this.subjectNestedList = response.data.items
 
-    tatusById(id){
+        })
+    },
+        //获取二级列表
+    subjectLevelOneChanged(value){
+        for(var i = 0; i<this.subjectNestedList.length; i++){
+            if(this.subjectNestedList[i].id == value){
+                this.subSubjectList = this.subjectNestedList[i].children
+            }
+        }
+    }, 
+
+    statusById(id){
         article.statusById(id).then(response =>{
             this.$message({
                 type: 'success',
                 message: '修改成功!'
         })
-          this.getPageList()
+        this.getPageList()
         }).catch((response) => {
             this.$message({
                 type: 'error',
@@ -188,7 +200,7 @@ import article from '@/api/dzd/article'
       resetData(){
         this.searchObj = {}
         this.page = 1
-        this.getList()
+        this.getPageList()
       },
       //删除课程by Id
       removeDataById(id,page){

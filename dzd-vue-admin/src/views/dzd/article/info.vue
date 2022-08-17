@@ -60,6 +60,7 @@ const defaultForm = {
   subjectId: '',
   subjectParentId: '',
   description: '',
+  memberId : 1,
   price: 0,
 }
 
@@ -70,7 +71,6 @@ export default {
       saveBtnDisabled: false ,// 保存按钮是否禁用,
       articleInfo: defaultForm,
       subjectNestedList: [],//一级分类列表
-      memberId : 1,
       subSubjectList: [{
           id:'',
           title:''
@@ -100,23 +100,23 @@ export default {
           this.fetchArticleInfoById()
         } else {
           this.articleInfo = { ...defaultForm }
-          // tinyMCE.activeEditor.setContent('') 
-          // 初始化分类列表
-        //   this.initSubjectList()
+          tinyMCE.activeEditor.setContent('') 
+          初始化分类列表
+          this.initSubjectList()
         }
     },
 
     fetchArticleInfoById(){
         article.getArticleInfoById(this.$route.params.id).then(response => {
             this.articleInfo = response.data.item
-        // article.getNestedTreeList().then(response=>{
-        //     this.subjectNestedList = response.data.items
-        //     for(let i = 0; i<this.subjectNestedList.length; i++){
-        //       if(this.subjectNestedList[i].id == this.articleInfo.subjectParentId){
-        //           this.subSubjectList = this.subjectNestedList[i].children
-        //       }  
-        //     }
-        // })
+        article.getNestedTreeList().then(response=>{
+            this.subjectNestedList = response.data.items
+            for(let i = 0; i<this.subjectNestedList.length; i++){
+              if(this.subjectNestedList[i].id == this.articleInfo.subjectParentId){
+                  this.subSubjectList = this.subjectNestedList[i].children
+              }  
+            }
+        })
         }).catch((response) => {
             this.$message({
             type: 'error',
@@ -165,7 +165,7 @@ export default {
     },
 
     // 发布
-    saveData(){
+    pushData(){
       this.saveBtnDisabled = true
       this.articleInfo.status = "Normal"
         article.saveOrPush(this.articleInfo).then(response =>{

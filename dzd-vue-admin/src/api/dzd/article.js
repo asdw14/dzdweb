@@ -49,6 +49,16 @@ export default {
             data : searchObj
         })
       },
+
+    //用户文章列表分页查询
+    getPageList(page,limit,searchObj){
+        return request({
+            url : `${api_name}/getPageList/${page}/${limit}`,
+            method :'post',
+            data : searchObj
+        })
+      },
+
     removeById(id){
         return request({
             url : `${api_name}/removeById/${id}`,

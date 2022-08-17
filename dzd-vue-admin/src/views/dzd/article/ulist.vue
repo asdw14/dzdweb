@@ -29,19 +29,7 @@
 
   <!-- 标题 -->
   <el-form-item>
-    <el-input v-model="searchObj.title" placeholder="课程标题"/>
-  </el-form-item>
-  <!-- 讲师 -->
-  <el-form-item>
-    <el-select
-      v-model="searchObj.teacherId"
-      placeholder="请选择讲师">
-      <el-option
-        v-for="teacher in teacherList"
-        :key="teacher.id"
-        :label="teacher.name"
-        :value="teacher.id"/>
-    </el-select>
+    <el-input v-model="searchObj.title" placeholder="文章标题"/>
   </el-form-item>
 
   <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
@@ -67,52 +55,76 @@
     </template>
   </el-table-column>
 
-  <el-table-column label="课程信息" width="470" align="center">
+  <!-- <el-table-column label="发贴用户" align="center">
+    <template slot-scope="scope">
+  <div class="demo-type">
+    <div> 
+      <el-avatar src="{{scope.row.avatar}}"></el-avatar>
+      {{ scope.row.userName }}
+
+    </div>
+  </div>
+    </template>
+  </el-table-column> -->
+
+
+  <el-table-column label="文章标题" width="300" align="center">
     <template slot-scope="scope">
       <div class="info">
-        <div class="pic">
-          <img :src="scope.row.cover"  width="150px">
-        </div>
         <div class="title">
           <a href="">{{ scope.row.title }}</a>
-          <p>{{ scope.row.lessonNum }}课时</p>
+
         </div>
       </div>
-
     </template>
   </el-table-column>
 
-  <el-table-column label="创建时间" align="center">
-    <template slot-scope="scope">
-      {{ scope.row.gmtCreate.substr(0, 10) }}
-    </template>
-  </el-table-column>
   <el-table-column label="发布时间" align="center">
     <template slot-scope="scope">
       {{ scope.row.gmtModified.substr(0, 10) }}
     </template>
   </el-table-column>
+
+    <el-table-column label="发布状态" align="center">
+    <template slot-scope="scope">
+      {{ scope.row.status == 'Normal' ? "已发布" : "未发布" }}
+    </template>
+  </el-table-column>
+
   <el-table-column label="价格" width="100" align="center" >
     <template slot-scope="scope">
       {{ Number(scope.row.price) === 0 ? '免费' :
       '¥' + scope.row.price.toFixed(2) }}
     </template>
   </el-table-column>
-  <el-table-column prop="buyCount" label="付费学员" width="100" align="center" >
+  <el-table-column prop="buyCount" label="购买次数" width="100" align="center" >
     <template slot-scope="scope">
-      {{ scope.row.buyCount }}人
+      {{ scope.row.buyCount }}次
+    </template>
+  </el-table-column>
+  
+    <el-table-column prop="buyCount" label="点赞量" width="100" align="center" >
+    <template slot-scope="scope">
+      {{ scope.row.praiseCount }}次
     </template>
   </el-table-column>
 
-  <el-table-column label="操作" width="150" align="center">
+    <el-table-column prop="buyCount" label="浏览量" width="100" align="center" >
     <template slot-scope="scope">
-      <router-link :to="'/edu/course/info/'+scope.row.id">
-        <el-button type="text" size="mini" icon="el-icon-edit">编辑课程信息</el-button>
-      </router-link>
-      <router-link :to="'/edu/course/chapter/'+scope.row.id">
-        <el-button type="text" size="mini" icon="el-icon-edit">编辑课程大纲</el-button>
-      </router-link>
+      {{ scope.row.viewCount }}次
+    </template>
+  </el-table-column>
+
+  <el-table-column label="操作" width="350" align="center">
+    <template slot-scope="scope">
+
+<!-- 修改文章浏览量、点赞量 -->
+        <el-button type="text" size="mini" icon ="el-icon-edit">暗箱操作</el-button>
+
       <el-button type="text" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
+      <el-button type="text" size="mini" icon="el-icon-s-tools" @click="statusById(scope.row.id)">
+      {{scope.row.isLock == 0 ? "封禁" : "解封"}}  
+      </el-button>
     </template>
   </el-table-column>
 </el-table>
@@ -129,9 +141,8 @@
   </div>
 </template>
 <script>
-  import course from '@/api/edu/course'
-  import teacher from '@/api/edu/teacher'
-import subject from '@/api/edu/subject'
+import article from '@/api/dzd/article'
+
   export default{
       data(){
           return{
@@ -140,10 +151,8 @@ import subject from '@/api/edu/subject'
             total: 0, // 总记录数
             page: 1, // 页码
             limit: 10, // 每页记录数
-            searchObj: {},// 查询条件
-            teacherList: [], // 讲师列表
-            subjectNestedList: [], // 一级分类列表
-            subSubjectList: [] // 二级分类列表,
+            searchObj: {},// 查询条件、
+            key :0
           }
       },
       created(){
@@ -151,57 +160,41 @@ import subject from '@/api/edu/subject'
       },
     methods:{
         fetchData(){
-            // 初始化分类列表
-          this.initSubjectList()
-          // 获取讲师列表
-          this.initTeacherList()
-            //获取课程列表分页
+            //获取文章列表分页
             this.getPageList()
         },
     
-      getList(){
-            course.list().then(response=>{
-                this.list = response.data.items
-            })
-        },
         // 条件查询带分页
         getPageList(page=1){
           this.page = page
           this.listLoading = true
-            course.getPageList(this.page, this.limit, this.searchObj).then(response=>{
+            article.getPageList(this.page, this.limit, this.searchObj).then(response=>{
                 this.list = response.data.items
                 this.total = response.data.total
                 this.listLoading = false
             })
         },
- // 获取讲师列表
-    initTeacherList(){
-        teacher.getList().then(response=>{
-            this.teacherList = response.data.items
+
+    statusById(id){
+        article.statusById(id).then(response =>{
+            this.$message({
+                type: 'success',
+                message: '修改成功!'
+        })
+        this.getPageList()
+        }).catch((response) => {
+            this.$message({
+                type: 'error',
+                message: response.message
+            })
         })
     },
 
-    // 初始化分类列表
-    initSubjectList(){
-        subject.getNestedTreeList().then(response=>{
-            this.subjectNestedList = response.data.items
-
-        })
-    },
-
-//获取二级列表
-    subjectLevelOneChanged(value){
-        for(var i = 0; i<this.subjectNestedList.length; i++){
-            if(this.subjectNestedList[i].id == value){
-                this.subSubjectList = this.subjectNestedList[i].children
-            }
-        }
-    },      
       //清空
       resetData(){
         this.searchObj = {}
         this.page = 1
-        this.getList()
+        this.getPageList()
       },
       //删除课程by Id
       removeDataById(id,page){
@@ -210,7 +203,7 @@ import subject from '@/api/edu/subject'
         cancelButtonText: '取消',
         type: 'warning'
         }).then(() => {
-          return course.removeById(id)
+          return article.removeById(id)
         }).then(() => {
           this.getPageList()
           this.$message({
