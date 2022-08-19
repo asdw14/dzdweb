@@ -54,7 +54,7 @@
 <script>
 import Tinymce from '@/components/Tinymce'
 import article from '@/api/dzd/article'
-   
+import subject from '@/api/dzd/subject'
 const defaultForm = {
   title: '',
   subjectId: '',
@@ -92,31 +92,26 @@ export default {
 
   methods: {
     init(){
-      if (this.$route.params && this.$route.params.id) {
-    console.log(this.$route.params.id)
+      //初始化分类列表
+          this.initSubjectList()  
+        if (this.$route.params && this.$route.params.id) {
+        console.log(this.$route.params.id)
 
           const id = this.$route.params.id
-          // 根据id获取课程基本信息
+          // 根据id获取文章基本信息
           this.fetchArticleInfoById()
         } else {
-          this.articleInfo = { ...defaultForm }
-          tinyMCE.activeEditor.setContent('') 
-          初始化分类列表
-          this.initSubjectList()
+            this.articleInfo = { ...defaultForm }
+            tinyMCE.activeEditor.setContent('') 
+            //初始化分类列表
+            this.initSubjectList()
         }
     },
 
+// 根据id获取文章基本信息
     fetchArticleInfoById(){
         article.getArticleInfoById(this.$route.params.id).then(response => {
             this.articleInfo = response.data.item
-        article.getNestedTreeList().then(response=>{
-            this.subjectNestedList = response.data.items
-            for(let i = 0; i<this.subjectNestedList.length; i++){
-              if(this.subjectNestedList[i].id == this.articleInfo.subjectParentId){
-                  this.subSubjectList = this.subjectNestedList[i].children
-              }  
-            }
-        })
         }).catch((response) => {
             this.$message({
             type: 'error',
@@ -124,7 +119,6 @@ export default {
             })
         })
     },
-
 
     // 初始化分类列表
     initSubjectList(){
@@ -134,11 +128,11 @@ export default {
         })
     },
 
-//获取二级列表
+    //获取二级列表
     subjectLevelOneChanged(value){
         for(var i = 0; i<this.subjectNestedList.length; i++){
             if(this.subjectNestedList[i].id == value){
-                this.subSubjectList = this.articleNestedList[i].children
+                this.subSubjectList = this.subjectNestedList[i].children
                 this.articleInfo.subjectId = ""
             }
         }

@@ -3,9 +3,10 @@
 <!--查询表单-->
 <el-form :inline="true" class="demo-form-inline">
 
+
   <!-- 所属分类：级联下拉列表 -->
   <!-- 一级分类 -->
-  <el-form-item label="课程类别">
+  <el-form-item label="文章类别" size="mini">
     <el-select
       v-model="searchObj.subjectParentId"
       placeholder="请选择"
@@ -27,13 +28,33 @@
     </el-select>
   </el-form-item>
 
+<!-- 日期 -->
+  <el-form-item  size="mini"  >
+        <el-date-picker
+          v-model="searchObj.begin"
+          type="date"
+          placeholder="选择开始日期"
+          value-format="yyyy-MM-dd"
+          
+           />
+      </el-form-item>
+
   <!-- 标题 -->
-  <el-form-item>
+  <el-form-item size="mini">
     <el-input v-model="searchObj.title" placeholder="文章标题"/>
   </el-form-item>
 
-  <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
-  <el-button type="default" @click="resetData()">清空</el-button>
+    <!-- 根据用户id或文章id搜索 -->
+  <el-form-item size="mini">
+    <el-input v-model="searchObj.id" placeholder="根据用户id或文章id搜索"/>
+  </el-form-item>
+
+  <template size="mini">
+    <el-radio v-model="searchObj.isLock" label="1" size="mini">已封禁</el-radio>
+  <el-radio v-model="searchObj.isLock" label="0" size="mini" >未封禁</el-radio>
+  </template> 
+  <el-button type="primary" icon="el-icon-search" @click="getPageList()" size="mini">查询</el-button>
+  <el-button type="default" @click="resetData()" size="mini">清空</el-button>
 </el-form>
 
    <!-- 表格 -->
@@ -55,17 +76,20 @@
     </template>
   </el-table-column>
 
-  <!-- <el-table-column label="发贴用户" align="center">
+  <el-table-column label="发贴用户" align="center">
+    <!-- 用户头像 -->
     <template slot-scope="scope">
-  <div class="demo-type">
-    <div> 
-      <el-avatar src="{{scope.row.avatar}}"></el-avatar>
-      {{ scope.row.userName }}
-
-    </div>
-  </div>
+      <div class="demo-type">
+        <div> 
+          <el-avatar :src="scope.row.avatar"></el-avatar>
+        </div>
+      </div>
+      
+        <!-- 用户昵称 -->
+         <el-link type="primary">{{scope.row.nickname}}</el-link>
     </template>
-  </el-table-column> -->
+
+  </el-table-column>
 
 
   <el-table-column label="文章标题" width="300" align="center">
@@ -85,11 +109,6 @@
     </template>
   </el-table-column>
 
-    <el-table-column label="发布状态" align="center">
-    <template slot-scope="scope">
-      {{ scope.row.status == 'Normal' ? "已发布" : "未发布" }}
-    </template>
-  </el-table-column>
 
   <el-table-column label="价格" width="100" align="center" >
     <template slot-scope="scope">
@@ -122,13 +141,12 @@
         <el-button type="text" size="mini" icon ="el-icon-edit">暗箱操作</el-button>
 
       <el-button type="text" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
-      <el-button type="text" size="mini" icon="el-icon-s-tools" @click="statusById(scope.row.id)">
+      <el-button type="text" size="mini" icon="el-icon-s-tools" @click="lockById(scope.row.id)">
       {{scope.row.isLock == 0 ? "封禁" : "解封"}}  
       </el-button>
     </template>
   </el-table-column>
 </el-table>
-
 <!-- 分页 -->
 <el-pagination
   :current-page="page"
@@ -138,10 +156,16 @@
   layout="total, prev, pager, next, jumper"
   @current-change="getPageList"
 />
+<el-backtop></el-backtop>
+
   </div>
+  
 </template>
+
 <script>
 import article from '@/api/dzd/article'
+import subject from '@/api/dzd/subject'
+
 
   export default{
       data(){
@@ -152,7 +176,9 @@ import article from '@/api/dzd/article'
             page: 1, // 页码
             limit: 10, // 每页记录数
             searchObj: {},// 查询条件、
-            key :0
+            key :0,
+            subjectNestedList: [], // 一级分类列表
+            subSubjectList: [] // 二级分类列表,
           }
       },
       created(){
@@ -162,21 +188,39 @@ import article from '@/api/dzd/article'
         fetchData(){
             //获取文章列表分页
             this.getPageList()
+            // 初始化分类列表
+          this.initSubjectList()
         },
     
         // 条件查询带分页
         getPageList(page=1){
           this.page = page
           this.listLoading = true
-            article.getPageList(this.page, this.limit, this.searchObj).then(response=>{
+            article.getUserPageList(this.page, this.limit, this.searchObj).then(response=>{
                 this.list = response.data.items
                 this.total = response.data.total
                 this.listLoading = false
             })
         },
+      // 初始化分类列表
+      initSubjectList(){
+        subject.getNestedTreeList().then(response=>{
+            this.subjectNestedList = response.data.items
 
-    statusById(id){
-        article.statusById(id).then(response =>{
+        })
+    },
+        //获取二级列表
+    subjectLevelOneChanged(value){
+        for(var i = 0; i<this.subjectNestedList.length; i++){
+            if(this.subjectNestedList[i].id == value){
+                this.subSubjectList = this.subjectNestedList[i].children
+            }
+        }
+    }, 
+
+//根据id修改封禁状态，封禁改为未封禁，未封禁改为封禁                 
+    lockById(id){
+        article.lockById(id).then(response =>{
             this.$message({
                 type: 'success',
                 message: '修改成功!'

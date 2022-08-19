@@ -5,7 +5,7 @@
 
   <!-- 所属分类：级联下拉列表 -->
   <!-- 一级分类 -->
-  <el-form-item label="文章类别">
+  <el-form-item label="文章类别" size="mini">
     <el-select
       v-model="searchObj.subjectParentId"
       placeholder="请选择"
@@ -27,13 +27,35 @@
     </el-select>
   </el-form-item>
 
-  <!-- 标题 -->
-  <el-form-item>
-    <el-input v-model="searchObj.title" placeholder="文章标题"/>
+<!-- 日期 -->
+  <el-form-item  size="mini"  >
+        <el-date-picker
+          v-model="searchObj.begin"
+          type="date"
+          placeholder="选择开始日期"
+          value-format="yyyy-MM-dd"
+          
+           />
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker
+          v-model="searchObj.end"
+          type="date"
+          placeholder="选择截止日期"
+          value-format="yyyy-MM-dd"
+          size="mini" />
   </el-form-item>
 
-  <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
-  <el-button type="default" @click="resetData()">清空</el-button>
+  <!-- 标题 -->
+  <el-form-item size="mini">
+    <el-input v-model="searchObj.title" placeholder="文章标题"/>
+  </el-form-item>
+  <template size="mini">
+    <el-radio v-model="searchObj.status" label="Normal" size="mini">已发布</el-radio>
+  <el-radio v-model="searchObj.status" label="Draft" size="mini" >未发布</el-radio>
+  </template> 
+  <el-button type="primary" icon="el-icon-search" @click="getPageList()" size="mini">查询</el-button>
+  <el-button type="default" @click="resetData()" size="mini">清空</el-button>
 </el-form>
 
    <!-- 表格 -->

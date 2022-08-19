@@ -40,6 +40,14 @@ export default {
           })
       },
 
+//根据id修改封禁状态，封禁改为未封禁，未封禁改为封禁                 
+      lockById(id){
+        return request({
+            url: `${api_name}/lockById/${id}`,      
+            method: 'put'
+          })
+      },
+
 
     //文章列表分页查询
     getPageList(page,limit,searchObj){
@@ -51,9 +59,9 @@ export default {
       },
 
     //用户文章列表分页查询
-    getPageList(page,limit,searchObj){
+    getUserPageList(page,limit,searchObj){
         return request({
-            url : `${api_name}/getPageList/${page}/${limit}`,
+            url : `${api_name}/getUserPageList/${page}/${limit}`,
             method :'post',
             data : searchObj
         })
