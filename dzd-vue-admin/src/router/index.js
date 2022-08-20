@@ -34,7 +34,7 @@ export const constantRoutes = [
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '弟中弟资源共享后台首页', icon: 'dashboard' }
+      meta: { title: '弟中弟共享云后台', icon: 'dashboard' }
     }]
   }]
 /**
