@@ -18,7 +18,7 @@ import _78309245 from '..\\layouts\\video.vue'
 const layouts = { "_default": _6f6c098b,"_sign": _2d297eb3,"_video": _78309245 }
 
 export default {
-  head: {"title":"谷粒学院 - Java视频|HTML5视频|前端视频|Python视频|大数据视频-自学拿1万+月薪的IT在线视频课程，谷粉力挺，老学员为你推荐","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"keywords","name":"keywords","content":"谷粒学院,IT在线视频教程,Java视频,HTML5视频,前端视频,Python视频,大数据视频"},{"hid":"description","name":"description","content":"谷粒学院是国内领先的IT在线视频学习平台、职业教育平台。截止目前,谷粒学院线上、线下学习人次数以万计！会同上百个知名开发团队联合制定的Java、HTML5前端、大数据、Python等视频课程，被广大学习者及IT工程师誉为：业界最适合自学、代码量最大、案例最多、实战性最强、技术最前沿的IT系列视频课程！"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
+  head: {"title":"弟中弟共享云 - 私有云盘|共享资源|分享文章|不限速不权限你！","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"keywords","name":"keywords","content":"弟中弟共享云 - 私有云盘，共享资源，分享文章，不限速不权限你！"},{"hid":"description","name":"description","content":"弟中弟共享云 - 私有云盘|共享资源|分享文章|不限速不权限你！"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
 
   render (h, props) {
     const loadingEl = h('NuxtLoading', { ref: 'loading' })

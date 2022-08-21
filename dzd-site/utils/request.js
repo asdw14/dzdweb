@@ -17,8 +17,8 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
   //debugger
-  if (cookie.get('guli_token')) {
-    config.headers['token'] = cookie.get('guli_token');
+  if (cookie.get('dzd_token')) {
+    config.headers['token'] = cookie.get('dzd_token');
   }
     return config
   },
