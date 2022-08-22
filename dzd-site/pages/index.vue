@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 幻灯片 开始 -->
-    <div v-swiper:mySwiper="swiperOption">
+    <div v-swiper:mySwiper="swiperOption"     >
       <div class="swiper-wrapper">
         <div
           v-for="banner in bannerList"
@@ -10,7 +10,7 @@
           style="background: #040b1b"
         >
           <a target="_blank" :href="banner.linkUrl">
-            <img width="100%" :src="banner.imageUrl" :alt="banner.title" />
+            <img :src="banner.imageUrl" :alt="banner.title" style="height: 100%"/>
           </a>
         </div>
       </div>
@@ -94,62 +94,67 @@
       <!-- /网校课程 结束 -->
       <div>
         <section class="container">
-      <el-table
-      :data="tableData"
-      style="width: 100%">
+          <el-table :data="sourceList" style="width: 100%">
+            <el-table-column label="上传用户" width="150" >
+                <template slot-scope="scope">
+               <!-- 用户头像 -->
+                <div>
+                    <el-avatar :src="scope.row.avatar" :size="small"></el-avatar>
+                </div>
+               <!-- 用户昵称 -->
+                <div>
+                  <el-link type="primary">{{scope.row.nickname}}</el-link>
+                </div>
+              </template>
+            </el-table-column>
 
-      <el-table-column
-        prop="nickname"
-        label="上传用户"
-        width="180">
-      </el-table-column>
+            <el-table-column prop="sourceName" label="资源名称" width="180">
+            </el-table-column>
 
-      <el-table-column
-        prop="sourceName"
-        label="资源名称"
-        width="180">
-      </el-table-column>
+            <el-table-column prop="downCount" label="下载数量"  width="80">
+            </el-table-column>
 
+            <el-table-column  label="文件大小"  width="80">
+              <template slot-scope="scope">
+                  {{ scope.row.fileSize}}/MB
+              </template>
+              
+            </el-table-column>
+            
+            <el-table-column fixed="right"> 
+              <el-tag type="success">免费</el-tag>
+            </el-table-column>
 
-      <el-table-column
-        prop="downCount"
-        label="下载数量">
-      </el-table-column>
+            <el-table-column label="上传日期" sortable  width="150" fixed="right">
+                <template slot-scope="scope">
+                  {{ scope.row.gmtCreate.substr(0, 10) }}
+              </template>
+            </el-table-column>
 
-      <el-table-column
-        prop="date"
-        label="上传日期"
-        sortable
-        width="180">
-      </el-table-column>
+            <el-table-column fixed="right" width="100">
 
-    <el-table-column
-      fixed="right"
-      
-      width="100">
-      <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-        <el-button size="small" type="success" icon="el-icon-download">下载</el-button>
-      </template>
-    </el-table-column>
+              <template slot-scope="scope">
+                  <a :href="scope.row.sourceOssUrl">
+                <el-button size="small" type="success" icon="el-icon-download" circle></el-button>
+                  </a>
+              </template>
 
-    </el-table>
+            </el-table-column>
+          </el-table>
+          
+      <!-- 分页 -->
+      <el-pagination
+        :current-page="page"
+        :page-size="limit"
+        :total="total"
+        style="padding: 30px 0; text-align: center;"
+        layout="total, prev, pager, next, jumper"
+        @current-change="getPublicPageList"
+      />
+        </section>
+      </div>
+      <el-backtop></el-backtop>
 
-<!-- 分页 -->
-<el-pagination
-  :current-page="page"
-  :page-size="limit"
-  :total="total"
-  style="padding: 30px 0; text-align: center;"
-  layout="total, prev, pager, next, jumper"
-  @current-change="getPageList"
-/>
-
-</section>
-
-</div>
-<el-backtop></el-backtop>
-    
       <!-- 网校名师 开始 -->
       <div>
         <section class="container">
@@ -203,6 +208,7 @@
 <script>
 import banner from "@/api/banner";
 import index from "@/api/index";
+import source from "@/api/source";
 export default {
   data() {
     return {
@@ -217,22 +223,41 @@ export default {
           prevEl: ".swiper-button-prev", //前一页dom节点
         },
       },
+      total: 0, // 总记录数
+      page: 1, // 页码
+      limit: 10, // 每页记录数
+      searchObj: {},// 查询条件、
       bannerList: {},
       teacherList: {},
       courseList: {},
+      sourceList: [],
+
     };
   },
   created() {
+    this.getPublicPageList();
     this.initDataBanner();
-    this.initDataObj();
+    // this.initDataObj();
+
   },
-  methods: {
+  methods: {      
+    //首页显示公开资源
+    getPublicPageList(page=1) {
+        this.page = page
+        source.getPublicPageList(this.page, this.limit, this.searchObj).then((response) => {
+                this.sourceList = response.data.data.items
+                this.total = response.data.data.total
+            });
+    },
+
     //显示banner
     initDataBanner() {
       banner.getList().then((response) => {
         this.bannerList = response.data.data.bannerList;
-      });
+      });     
     },
+
+
     //首页显示课程和名师数据
     initDataObj() {
       index.getList().then((response) => {
