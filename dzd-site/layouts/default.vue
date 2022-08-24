@@ -17,7 +17,7 @@
               <a>资源</a>
             </router-link>
             <router-link to="/teacher" tag="li" active-class="current">
-              <a>名师</a>
+              <a>用户</a>
             </router-link>
             <router-link to="/article" tag="li" active-class="current">
               <a>文章</a>
@@ -141,6 +141,7 @@ import '~/assets/css/nice_select.css'
 import '~/assets/css/order.css'
 import '~/assets/css/swiper-3.3.1.min.css'
 import "~/assets/css/pages-weixinpay.css"
+  
 
 import cookie from 'js-cookie'
 import userApi from '@/api/login'
@@ -161,7 +162,7 @@ export default {
   },
 
   created() {
-    console.log(this.$route.query.token)
+    // console.log(this.$route.query.token)
     this.token = this.$route.query.token
     if (this.token) {
       this.wxLogin()
@@ -173,7 +174,7 @@ export default {
     showInfo() {
       //debugger
       var jsonStr = cookie.get("dzd_ucenter");
-      console.log(jsonStr)
+      // console.log(jsonStr)
       // alert(jsonStr)
       if (jsonStr) {
         this.loginInfo.id=123156

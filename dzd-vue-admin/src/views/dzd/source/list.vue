@@ -45,14 +45,21 @@
 
       <el-table-column label="上传用户" width="150">
         <template slot-scope="scope">
+          <!-- 点击头像跳转到用户管理 -->
+        <div @click="goUserInfo(scope.row.userId)">
+
           <!-- 用户头像 -->
           <div>
             <el-avatar :src="scope.row.avatar" :size="small"></el-avatar>
-          </div>
+          </div>    
+         
           <!-- 用户昵称 -->
           <div>
             <el-link type="primary">{{ scope.row.nickname }}</el-link>
           </div>
+
+         </div>
+
         </template>
       </el-table-column>
 
@@ -181,6 +188,12 @@ export default {
             });
           }
         });
+    },
+
+//跳转到用户
+    goUserInfo(id){
+      this.$router.push(`/dzd/user/list/${id}`)
+
     },
 
     //清空

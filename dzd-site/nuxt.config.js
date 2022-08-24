@@ -7,7 +7,7 @@ module.exports = {
   ],
 
   css: [
-    'swiper/dist/css/swiper.css'
+    'swiper/dist/css/swiper.css',
   ],
 
   head: {

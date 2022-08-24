@@ -162,7 +162,10 @@ import user from '@/api/dzd/user'
       },
     methods:{
         fetchData(){
-            //获取文章列表分页
+          if (this.$route.params && this.$route.params.userId) {
+            this.searchObj.id = this.$route.params.userId;
+          }
+            //获取用户列表分页
             this.getPageList()
         },
     

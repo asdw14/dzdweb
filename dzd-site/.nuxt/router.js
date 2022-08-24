@@ -3,10 +3,12 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
+const _7fb5db07 = () => interopDefault(import('..\\pages\\article\\index.vue' /* webpackChunkName: "pages_article_index" */))
 const _d6768a88 = () => interopDefault(import('..\\pages\\course\\index.vue' /* webpackChunkName: "pages_course_index" */))
 const _1a67f564 = () => interopDefault(import('..\\pages\\login.vue' /* webpackChunkName: "pages_login" */))
 const _4a6e68ce = () => interopDefault(import('..\\pages\\register.vue' /* webpackChunkName: "pages_register" */))
 const _6cb6909b = () => interopDefault(import('..\\pages\\teacher\\index.vue' /* webpackChunkName: "pages_teacher_index" */))
+const _2b3cf32f = () => interopDefault(import('..\\pages\\article\\_id.vue' /* webpackChunkName: "pages_article__id" */))
 const _1a7a3c24 = () => interopDefault(import('..\\pages\\course\\_id.vue' /* webpackChunkName: "pages_course__id" */))
 const _1e6a35db = () => interopDefault(import('..\\pages\\orders\\_oid.vue' /* webpackChunkName: "pages_orders__oid" */))
 const _79ae68d9 = () => interopDefault(import('..\\pages\\pay\\_pid.vue' /* webpackChunkName: "pages_pay__pid" */))
@@ -31,6 +33,10 @@ export const routerOptions = {
   scrollBehavior,
 
   routes: [{
+    path: "/article",
+    component: _7fb5db07,
+    name: "article"
+  }, {
     path: "/course",
     component: _d6768a88,
     name: "course"
@@ -46,6 +52,10 @@ export const routerOptions = {
     path: "/teacher",
     component: _6cb6909b,
     name: "teacher"
+  }, {
+    path: "/article/:id",
+    component: _2b3cf32f,
+    name: "article-id"
   }, {
     path: "/course/:id",
     component: _1a7a3c24,

@@ -79,6 +79,7 @@
   <el-table-column label="发贴用户" align="center">
     <!-- 用户头像 -->
     <template slot-scope="scope">
+      <router-link :to="'/dzd/user/list/' + scope.row.memberId">
       <div class="demo-type">
         <div> 
           <el-avatar :src="scope.row.avatar"></el-avatar>
@@ -87,6 +88,7 @@
       
         <!-- 用户昵称 -->
          <el-link type="primary">{{scope.row.nickname}}</el-link>
+      </router-link>
     </template>
 
   </el-table-column>
