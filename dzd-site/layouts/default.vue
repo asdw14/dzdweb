@@ -16,14 +16,14 @@
             <router-link to="/course" tag="li" active-class="current">
               <a>资源</a>
             </router-link>
-            <router-link to="/teacher" tag="li" active-class="current">
-              <a>用户</a>
-            </router-link>
             <router-link to="/article" tag="li" active-class="current">
               <a>文章</a>
             </router-link>
             <router-link to="/qa" tag="li" active-class="current">
               <a>问答</a>
+            </router-link>
+            <router-link to="/teacher" tag="li" active-class="current">
+              <a>个人主页</a>
             </router-link>
           </ul>
  <!-- / nav -->
