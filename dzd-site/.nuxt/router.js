@@ -7,6 +7,7 @@ const _7fb5db07 = () => interopDefault(import('..\\pages\\article\\index.vue' /*
 const _d6768a88 = () => interopDefault(import('..\\pages\\course\\index.vue' /* webpackChunkName: "pages_course_index" */))
 const _1a67f564 = () => interopDefault(import('..\\pages\\login.vue' /* webpackChunkName: "pages_login" */))
 const _4a6e68ce = () => interopDefault(import('..\\pages\\register.vue' /* webpackChunkName: "pages_register" */))
+const _919b9a88 = () => interopDefault(import('..\\pages\\source\\index.vue' /* webpackChunkName: "pages_source_index" */))
 const _6cb6909b = () => interopDefault(import('..\\pages\\teacher\\index.vue' /* webpackChunkName: "pages_teacher_index" */))
 const _2b3cf32f = () => interopDefault(import('..\\pages\\article\\_id.vue' /* webpackChunkName: "pages_article__id" */))
 const _1a7a3c24 = () => interopDefault(import('..\\pages\\course\\_id.vue' /* webpackChunkName: "pages_course__id" */))
@@ -48,6 +49,10 @@ export const routerOptions = {
     path: "/register",
     component: _4a6e68ce,
     name: "register"
+  }, {
+    path: "/source",
+    component: _919b9a88,
+    name: "source"
   }, {
     path: "/teacher",
     component: _6cb6909b,
