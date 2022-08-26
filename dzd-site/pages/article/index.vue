@@ -69,7 +69,7 @@
              <!-- 帖子标题 -->
                 <el-col :span="18" :offset="1">
                     <router-link :to="'article/' + article.id ">
-                    <strong style="font-size:20px">{{article.title}}</strong>
+                    <strong style="font-size:20px; ">{{article.title}}</strong>
                     </router-link>
                     </el-col>
 
@@ -78,8 +78,8 @@
                     <el-tag type="success" size="small">免费</el-tag>
                   </div>
                   <div v-else>
-                    <el-tag type="danger">付费</el-tag>
-                    {{article.price}}
+                    <el-tag type="danger">付费{{article.price}}$</el-tag>
+
                   </div>
                 </el-col>
 
@@ -101,14 +101,14 @@
                     </div>
                 </el-col>
                 <!-- 昵称 -->
-                <el-col :span="2" >
+                <el-col :span="4" >
                     <div style="margin: 0 auto">
                        <div style="font-size:16px; color: #999999;">&emsp;{{article.nickname}}</div>
                     </div>
                 </el-col>
 
                 <!-- 发布时间-->
-            <el-col :span="7" :offset="11">
+            <el-col :span="7" :offset="8">
                 <div style="font-size:1px; color: #888888;">
                      <i class="el-icon-time"  style="margin: 0 10px; font-size: 16px; color: #888888">于{{article.gmtCreate.substr(0, 16)}}发布</i>
                 </div>
@@ -117,20 +117,26 @@
             <!-- 浏览量-->
             <el-col :span="1" >
                 <div>
-                    <i class="el-icon-view"  style=" font-size: 17px; color: deepskyblue">{{article.viewCount}}</i>
+                    <i class="el-icon-view"  style=" font-size: 15px; color: deepskyblue">{{article.viewCount}}</i>
                 </div>
             </el-col>
                 <!-- 点赞 -->
             <el-col :span="1" >
                 <div>
-                    <i class="el-icon-thumb"  style=" font-size: 17px; color: deepskyblue" >{{article.praiseCount}}</i>
+                    <i class="el-icon-thumb"  style=" font-size: 15px; color: deepskyblue" >{{article.praiseCount}}</i>
+                </div>
+            </el-col>
+            <!-- 评论 -->
+            <el-col :span="1" >
+                <div>
+                    <i class="el-icon-s-comment"  style=" font-size: 15px; color: deepskyblue" >{{article.commentCount}}</i>
                 </div>
             </el-col>
             </el-row>
 
         </el-card>
         <div style="text-align: center;">
-          <el-button type="success" round @click="getNextPageList()" style="width: 500;">点击加载更多</el-button>
+          <el-button type="success" round @click="getNextPageList()" style="width: 500; margin: 10px 10px;">点击加载更多</el-button>
          </div>
         <!-- 回到最顶 -->
             <el-backtop :bottom="100">
