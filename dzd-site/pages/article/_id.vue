@@ -2,42 +2,43 @@
     <section class="container">
       <br />
       <div style="text-align: center;" >
-        <b style="font-size: 40px; margin:0 auto" ><font face="楷体">弟中弟项目文章详情</font></b>
+        <b style="font-size: 30px; margin:0 auto" ><font face="楷体">{{articleInfo.title}}</font></b>
        </div>
-    <el-card class="box-card" style="border-radius: 30px; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);">
+    <el-card class="box-card" style="border-radius: 30px; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); width: 90%; margin: auto;">
       <!-- 卡片头，包括头像评论点赞阅读数量 -->
         <el-row >
-
             <el-col :span="1" >
                 <div>
-                  <el-tag type="success">原创</el-tag>
+                  <el-tag type="success" size="mini">原创</el-tag>
                 </div>
             </el-col>
 
             <!-- 昵称 -->
             <el-col :span="2" :offset="1">
-                <div style="margin: 0 auto">
-                   <div style="font-size:16px; color: #999999;">用户名</div>
+                <div >
+                   <div style="font-size:16px; color: #999999;">{{articleInfo.nickname}}</div>
                 </div>
             </el-col>
             <!-- 发布时间-->
-            <el-col :span="7" :offset="13">
-                <div style="font-size:19px; color: #888888;">
-                     <i class="el-icon-time"  style="margin: 0 10px; font-size: 20px; color: #888888">于2022-08-25 11:22发布</i>
+            <el-col :span="7" >
+                <div style="font-size:17px; color: #888888;">
+                     <i class="el-icon-time"  style="margin: 0 10px; font-size: 17px; color: #888888">于{{articleInfo.gmtCreate!=null? articleInfo.gmtCreate.substr(0, 16): "1970-11-11 11:11 "}}发布</i>
                 </div>
             </el-col>
 
         </el-row>
         <el-row>
                 <!-- 用户头像 -->
-              <el-col :span="1" :offset="2"><div >
-                        <el-avatar></el-avatar>
-                    </div>
-                </el-col>
+
             </el-row>
 
 
             <el-row>
+              <el-col :span="1" :offset="2">
+
+                        <el-avatar :src="articleInfo.avatar" size="small"></el-avatar>
+
+                </el-col>
               <!-- 分类-->
               <!-- <el-col :span="6" :offset="1">
                   <div>
@@ -46,21 +47,21 @@
               </el-col> -->
 
                 <!-- 浏览量-->
-                <el-col :span="3" :offset="15">
+                <el-col :span="2.5" :offset="15">
                     <div>
-                        <i class="el-icon-view"  style="margin: 0 10px; font-size: 18px; color:  #777777">200浏览</i>
+                        <i class="el-icon-view"  style="margin: 0 10px; font-size: 13px; color:  #777777">{{articleInfo.viewCount}}浏览</i>
                     </div>
                 </el-col>
                     <!-- 点赞 -->
-                <el-col :span="3" >
+                <el-col :span="2.5" >
                     <div>
-                        <i class="el-icon-thumb"  style="margin: 0 10px; font-size: 18px; color:  #777777" >300点赞</i>
+                        <i class="el-icon-thumb"  style="margin: 0 10px; font-size: 13px; color:  #777777" >{{articleInfo.praiseCount}}点赞</i>
                     </div>
                 </el-col>
                 <!-- 评论 -->
-                <el-col :span="3" >
+                <el-col :span="2.5" >
                     <div>
-                        <i class="el-icon-s-comment"  style="margin: 0 10px; font-size: 18px; color: #777777" >300评论</i>
+                        <i class="el-icon-s-comment"  style="margin: 0 10px; font-size: 13px; color: #777777" >{{articleInfo.commentCount}}评论</i>
                     </div>
                 </el-col>
 
@@ -71,41 +72,25 @@
         <br />
         <!-- 正文 -->
       <el-row>
-        <el-col :span="22" :offset="1" >
-          <div style="letter-spacing: 4px;font-size: 20px; line-height:2.5em;">
-字体介绍：
+        <el-col :span="20" :offset="2" >
+          <div style="letter-spacing: 3.5px;font-size: 17px; line-height:2.3em; color: #404040" v-html="articleInfo.description">
 
-<font face="宋体">方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。字体介绍：
-
-方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。字体介绍：
-
-方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不</font>够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。字体介绍：
-
-方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。字体介绍：
-
-方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。字体介绍：
-
-方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。字体介绍：
-
-方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。字体介绍：
-
-方正新楷体是方正楷体的深度优化版。方正楷体制作年代较早，复刻自铅字楷体字稿，限于当时的技术手段，细节不够完善。方正新楷体的笔法更为讲究，笔画分明利落，字形端正，细节精致，曲线节点的位置都有明确规则。相对原方正楷体，方正新楷体的字面稍大，中宫也稍放松，文本灰度均匀统一，是一款优良的正文排版字体。
-        </div>
+      </div>
         </el-col>
       </el-row>
 
       <el-row>
 
-        <el-col :span="5" :offset="19" >
-            <div style="font-size: 18px; color: #00ABF2;"><b>更新于：2022-08-25 00:17</b></div>
+        <el-col :span="6" :offset="18" >
+            <div style="font-size: 18px; color: #00ABF2;"><b>更新于：{{articleInfo.gmtCreate!=null? articleInfo.gmtCreate.substr(0, 16): "1970-11-11 11:11 "}}</b></div>
          </el-col>
        </el-row>
     </el-card>
 
 <br>
     <el-row>
-        <div style="font-size: 25px;">
-          文章分类：<el-tag type="success" effect="plain" style="font-size: 23px; border-radius: 30px;">原创</el-tag>
+        <div style="font-size: 22px;">
+          文章分类：<el-tag type="success" effect="plain" style="font-size: 19px; border-radius: 30px;">原创</el-tag>
         </div>
         <el-col :span="2" :offset="22" >
            <div style="font-size: 18px;">
@@ -139,28 +124,28 @@
             </el-input>
          </div>
          </el-col>
-       <el-col :span="1" style=" padding:95px 15px; ">
-              <el-button type="success" plain>评论</el-button>
+       <el-col :span="1" style=" padding:100px 12px; ">
+              <el-button type="success" plain size="small">评论</el-button>
        </el-col >
      </el-row>
 
-      &emsp;&emsp;&emsp;<div style="font-size: 25px;"><b>共0条评论</b></div>
+      &emsp;&emsp;&emsp;<div style="font-size: 25px;"><b>共{{articleInfo.commentCount}}条评论</b></div>
       <!-- 换行线 -->
        <el-divider></el-divider>
 
 <!-- 评论列表 -->
 
-      <el-card shadow="hover" v-for="i in 4" :key="i" style="border-radius: 13px; width: 80%; margin: auto; margin-bottom:15px; min-height: 150px;">
+      <el-card shadow="hover" v-for="comment in articleInfo.comments" :key="comment.id" style="border-radius: 13px; width: 80%; margin: auto; margin-bottom:15px; min-height: 150px;">
         <el-row :gutter="20">
           <el-col :span="2" offset="1">
             <div>
-              <el-avatar style="font-size:100px"></el-avatar>
+              <el-avatar style="font-size:100px" :src="comment.avatar"></el-avatar>
              </div>
             </el-col>
             <!-- 评论 -->
           <el-col :span="18" >
-            <div style="font-size: 18px;"><b>用户名</b></div>
-            <div style="letter-spacing: 3px;font-size: 17px; line-height:1.5em; color: #666666">鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}</div></el-col>
+            <div style="font-size: 18px;"><b>{{comment.nickname}}</b></div>
+            <div style="letter-spacing: 3px;font-size: 15px; line-height:1.5em; color: #666666">{{comment.content}}</div></el-col>
         </el-row>
 
         <el-row :gutter="20">
@@ -168,7 +153,7 @@
           <el-col :span="6" offset="18">
             <div>
               <el-button  style="font-size: 15px; color:#00A8E9" size="mini" icon="el-icon-caret-top">
-                1
+                {{comment.praiseCount}}
                 </el-button>
                 <el-button  style="font-size: 15px; color:forestgreen" size="mini" icon="el-icon-chat-round">
                   回复
@@ -178,17 +163,20 @@
         </el-row>
         <br />
         <!-- 回复下的回复 -->
-          <el-card shadow="hover" v-for="i in 2" :key="i" style="border-radius: 13px; width: 90%; margin: auto;">
+          <el-card shadow="hover" v-for="commentChildren in comment.children" :key="commentChildren.id" style="border-radius: 13px; width: 90%; margin: auto;">
             <el-row :gutter="20">
               <el-col :span="2" offset="1">
                 <div>
-                  <el-avatar style="font-size:100px"></el-avatar>
+                  <el-avatar style="font-size:100px" :src="comment.avatar"></el-avatar>
                  </div>
                 </el-col>
                 <!-- 评论 -->
               <el-col :span="18" >
                 <div style="font-size: 18px;"><b>用户名</b></div>
-                <div style="letter-spacing: 3px;font-size: 17px; line-height:1.5em; color: #666666">鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}鼠标悬浮时显示{{i}}</div></el-col>
+                <div style="letter-spacing: 3px;font-size: 17px; line-height:1.5em; color: #666666">
+                    {{commentChildren.content}}
+                  </div>
+                 </el-col>
             </el-row>
 
             <el-row :gutter="20">
@@ -196,7 +184,7 @@
               <el-col :span="6" offset="18">
                 <div>
                   <el-button  style="font-size: 15px; color:#00A8E9" size="mini" icon="el-icon-caret-top">
-                    1
+                    {{commentChildren.praiseCount}}
                     </el-button>
                     <el-button  style="font-size: 15px; color:forestgreen" size="mini" icon="el-icon-chat-round">
                       回复
@@ -207,7 +195,7 @@
 
 
           </el-card>
-            加载更多
+            {{comment.children.length>2 ? "加载更多" : ""}}
       </el-card>
 
 <!-- 回到最顶 -->
@@ -235,8 +223,8 @@
   export default {
       data () {
         return {
-          articleInfo:[], //帖子列表
-          textarea: ''
+          textarea: '', //输入评论的信息
+          articleInfo:{}  //帖子详细信息
         }
       },
 
@@ -245,7 +233,7 @@
 
       },
       //加载完渲染时
-      created () {
+      created() {
         //获取文章详情
         this.getArticleInfo()
       },
@@ -254,7 +242,8 @@
         //获取文章详情
         getArticleInfo(){
           article.getArticleInfo(this.id).then((response) => {
-                this.Articlelist = response.data.data.item
+            console.log(this.id)
+                this.articleInfo = response.data.data.item
             });
         }
 

@@ -10,12 +10,12 @@ export default {
       data : searchObj
     })
   },
-  
+
   //获取帖子详情
   getArticleInfo(id) {
     return request({
       url: `${api_name}/getArticleInfo/${id}`,
-      method: 'get',
+      method: 'post',
     })
   },
 
