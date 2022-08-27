@@ -19,4 +19,12 @@ export default {
     })
   },
 
+  //根据帖子id获取评论
+  getCommentByArticleId(id){
+    return request({
+      url: `${api_name}/getCommentByArticleId/${id}`,
+      method: 'get',
+    })
+  }
+
 }

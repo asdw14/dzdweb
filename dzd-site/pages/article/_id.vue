@@ -114,13 +114,8 @@
       <!-- 评论输入框 -->
       <el-col :span="20" offset="1">
         <div>
-          <el-input style="font-size: 18px;"
-            type="textarea"
-            placeholder="请输入你的评论....."
-            v-model="commentInfo.content"
-            maxlength="300"
-            show-word-limit
-            :autosize="{ minRows: 5, maxRows: 40}">
+          <el-input style="font-size: 18px;" type="textarea" placeholder="请输入你的评论....." v-model="commentInfo.content"
+            maxlength="300" show-word-limit :autosize="{ minRows: 5, maxRows: 40}">
           </el-input>
         </div>
       </el-col>
@@ -156,9 +151,23 @@
             <el-button style="font-size: 15px; color:#00A8E9" size="mini" icon="el-icon-caret-top">
               {{comment.praiseCount}}
             </el-button>
-            <el-button style="font-size: 15px; color:forestgreen" size="mini" icon="el-icon-chat-round">
+            <el-button style="font-size: 15px; color:forestgreen" size="mini" icon="el-icon-chat-round" @click="dialogFormVisible = true">
               回复
             </el-button>
+
+            <!-- bug待修复,隐藏不销毁数据 -->
+            <el-dialog title="评论内容" v-if="dialogFormVisible" :visible.sync="dialogFormVisible" v-dialogDrag
+              :destroy-on-close="true" :before-close="handleClose">
+              <el-form :model="commentInfo" destroy-on-close v-if="dialogFormVisible">
+                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 7}" placeholder="请输入内容" v-model="commentInfo.content">
+                </el-input>
+                {{comment.id}}
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="commentPush(comment.id)">确 定</el-button>
+              </div>
+            </el-dialog>
           </div>
         </el-col>
       </el-row>
@@ -187,7 +196,7 @@
               <el-button style="font-size: 15px; color:#00A8E9" size="mini" icon="el-icon-caret-top">
                 {{commentChildren.praiseCount}}
               </el-button>
-              <el-button style="font-size: 15px; color:forestgreen" size="mini" icon="el-icon-chat-round">
+              <el-button style="font-size: 15px; color:forestgreen" size="mini" icon="el-icon-chat-round" >
                 回复
               </el-button>
             </div>
@@ -225,10 +234,13 @@
     data() {
       return {
         commentInfo: {
-            content:'',
-            byMemberId : '' //回复给哪个用户
+          content: '',
+          byMemberId: '', //回复给哪个用户
+          parentId: ''
         }, //输入评论的信息
-        articleInfo: {} //帖子详细信息
+        articleInfo: {}, //帖子详细信息
+        dialogFormVisible: false,
+        dialogFormVisible2: false,
       }
     },
 
@@ -251,62 +263,85 @@
       //获取文章详情
       getArticleInfo() {
         article.getArticleInfo(this.id).then((response) => {
-          console.log(this.id)
           this.articleInfo = response.data.data.item
         });
       },
 
-      //帖子一级评论
-     async commentPush(parentId=this.id,byMemberId='') {
-       if(this.commentInfo.content.length < 1 ){
-         this.$message({
-                   showClose: true,
-                   message: '评论不能为空！',
-                   type: 'error'
-                 })
-       }
+      //帖子评论通用
+      async commentPush(parentId, byMemberId = '') {
+        console.log(parentId)
+        //关闭弹窗
+        this.dialogFormVisible = false
+        this.dialogFormVisible2 = false
+
+        //判断评论是否为空
+        if (this.commentInfo.content.length < 1) {
+          this.$message({
+            showClose: true,
+            message: '评论不能为空！',
+            type: 'error'
+          })
+        }
         //需要先登录才能评论
-       const  flag = this.isLongin()
-        if(flag==true){
-          this.commentInfo.articleId = this.id
+        const flag = this.isLongin()
+        if (flag == true) {
+          if (parentId == '' || parentId == null) {
+            parentId = this.id
+          }
           this.commentInfo.parentId = parentId
+          this.commentInfo.articleId = this.id
           this.commentInfo.byMemberId = byMemberId
           comment.commentPush(this.commentInfo).then((response) => {
             this.$message({
               type: 'success',
-              message: '回复成功!'
+              message: response.data.message
             })
-            this.commentInfo.content = ''
-
           }).catch((response) => {
-              this.$message({
-                type: 'error',
-                message: response.message
-              })
+            this.$message({
+              type: 'error',
+              message: response.message
             })
+          })
+          this.commentInfo.content = ''
+          this.commentInfo.parentId = ''
+          this.getArticleInfo()
         }
+      },
+
+      //根据帖子id获取评论
+      getCommentByArticleId() {
+        comment.getCommentByArticleId(id).then((response) => {
+          this.articleInfo.comments = response.data.data.items
+        })
 
       },
 
-    //判断是否已登录
-    isLongin() {
-      //debugger
-      var user = cookie.get("dzd_ucenter");
-      if (user==null || user=="") {
+      //判断是否已登录
+      isLongin() {
+        //debugger
+        var user = cookie.get("dzd_ucenter");
+        if (user == null || user == "") {
           this.$message({
-                    showClose: true,
-                    message: '您还未进行登录，登录后可评论！3秒后自动跳转至登录页',
-                    type: 'error'
-                  })
+            showClose: true,
+            message: '您还未进行登录，登录后可评论！3秒后自动跳转至登录页',
+            type: 'error'
+          })
 
-    // 3秒后执行跳转至登录页
+          // 3秒后执行跳转至登录页
           setTimeout(() => {
             window.location.href = "/login"
           }, 3000);
+        }
+        return true;
+      },
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
-       return true;
-  },
-}
+    }
   }
 </script>
 <style scoped>
