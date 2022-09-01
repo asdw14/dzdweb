@@ -2,15 +2,16 @@
   <!-- <div> -->
     <section class="container" >
       <el-table :data="sourceList" style="width: 80%;margin: auto;">
-        <el-table-column label="上传用户" width="150" >
+        <el-table-column  width="45" fixed="left">
            <!-- 根据文件类型显示对应图标 -->
            <!-- 压缩包 -->
             <template slot-scope="scope">
 
               <div v-if="scope.row.originalName.substring(scope.row.originalName.lastIndexOf('.') +1 ) === 'zip' ||
 
-               scope.row.originalName.substring(scope.row.originalName.lastIndexOf('.') +1 ) =='rar'|| scope.row.originalName.substring(scope.row.originalName.lastIndexOf('.') +1 )=='7z' ">
-                <img src="~/assets/icon/压缩包.png" width="100%" alt="压缩包">
+               scope.row.originalName.substring(scope.row.originalName.lastIndexOf('.') +1 ) =='rar'|| scope.row.originalName.substring(scope.row.originalName.lastIndexOf('.') +1 )=='7z' "
+              >
+                <img src="~/assets/icon/压缩包 (1).png" alt="压缩包">
               </div >
 
             <!-- 为文件夹 -->
@@ -63,28 +64,23 @@
             </template>
         </el-table-column>
 
-        <el-table-column prop="originalName" label="后缀" width="180">
-         <template slot-scope="scope"> {{scope.row.originalName.substring(scope.row.originalName.lastIndexOf('.') +1 )}}
-        </template>
-        </el-table-column>
-
-        <el-table-column prop="sourceName" label="资源名称" width="180">
+        <el-table-column prop="sourceName" width="180" fixed="left" label="文件名">
         </el-table-column>
 
         <el-table-column prop="downCount" label="下载数量"  width="80">
         </el-table-column>
 
-        <el-table-column  label="文件大小"  width="80">
+        <el-table-column  label="大小"  width="80" fixed="right">
           <template slot-scope="scope">
               {{ scope.row.fileSize}}/MB
           </template>
 
         </el-table-column>
+        <el-table-column width="250" >
 
-        <el-table-column fixed="right">
         </el-table-column>
 
-        <el-table-column label="上传日期" sortable  width="150" fixed="right">
+        <el-table-column label="上传时间" sortable  width="150" >
             <template slot-scope="scope">
               {{ scope.row.gmtCreate.substr(0, 10) }}
           </template>
@@ -164,5 +160,9 @@ export default {
   }
   .show {
     display: block;
+  }
+
+  img{
+    width: 100%;
   }
 </style>
