@@ -3,12 +3,17 @@ module.exports = {
   ** Headers of the page
   */
   plugins: [
-    { src: '~/plugins/nuxt-swiper-plugin.js', ssr: false }
+    { src: '~/plugins/nuxt-swiper-plugin.js', ssr: true }
+    ,{src:'~/plugins/swiper',ssr:false}
   ],
 
   css: [
-    'swiper/dist/css/swiper.css',
+    'swiper/dist/css/swiper.css', 
   ],
+  server:{
+    port:3000
+    ,host: '0.0.0.0'
+  },
 
   head: {
     title: '弟中弟共享云 - 私有云盘|共享资源|分享文章|不限速不权限你！',

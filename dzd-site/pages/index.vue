@@ -27,73 +27,14 @@
     <!-- 幻灯片 结束 -->
 
     <div id="aCoursesList">
-      <!-- 网校课程 开始 -->
+
       <div>
         <section class="container">
           <header class="comm-title">
             <h2 class="tac">
-              <span class="c-333">热门资源</span>
+              <span class="c-333" style="font-size: 35px;">热门资源</span>
             </h2>
           </header>
-          <div>
-            <article class="comm-course-list">
-              <ul class="of" id="bna">
-                <li v-for="(course, index) in courseList" v-bind:key="index">
-                  <div class="cc-l-wrap">
-                    <section class="course-img">
-                      <!-- ~/assets/photo/course/01.jpg -->
-                      <img
-                        :src="course.cover"
-                        class="img-responsive"
-                        :alt="course.title"
-                      />
-                      <div class="cc-mask">
-                        <a
-                          :href="'/course/' + course.id"
-                          title="开始学习"
-                          class="comm-btn c-btn-1"
-                          >开始学习</a
-                        >
-                      </div>
-                    </section>
-                    <h3 class="hLh30 txtOf mt10">
-                      <a
-                        href="#"
-                        :title="course.title"
-                        class="course-title fsize18 c-333"
-                        >{{ course.title }}</a
-                      >
-                    </h3>
-                    <section class="mt10 hLh20 of">
-                      <span
-                        class="fr jgTag bg-green"
-                        v-if="Number(course.price) === 0"
-                      >
-                        <i class="c-fff fsize12 f-fA">免费</i>
-                      </span>
-                      <span class="fr jgTag bg-green" v-else>
-                        <i class="c-fff fsize12 f-fA"> ￥{{ course.price }}</i>
-                      </span>
-                      <span class="fl jgAttr c-ccc f-fA">
-                        <i class="c-999 f-fA">{{ course.buyCount }} 人学习</i>
-                        |
-                        <i class="c-999 f-fA">{{ course.viewCount }} 人浏览</i>
-                      </span>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-              <div class="clear"></div>
-            </article>
-            <section class="tac pt20">
-              <a href="#" title="全部课程" class="comm-btn c-btn-2">全部资源</a>
-            </section>
-          </div>
-        </section>
-      </div>
-      <!-- /网校课程 结束 -->
-      <div>
-        <section class="container">
           <el-table :data="sourceList" style="width: 100%">
             <el-table-column label="上传用户" width="150" >
                 <template slot-scope="scope">
@@ -118,10 +59,10 @@
               <template slot-scope="scope">
                   {{ scope.row.fileSize}}/MB
               </template>
-              
+
             </el-table-column>
-            
-            <el-table-column fixed="right"> 
+
+            <el-table-column fixed="right">
               <el-tag type="success">免费</el-tag>
             </el-table-column>
 
@@ -141,7 +82,7 @@
 
             </el-table-column>
           </el-table>
-          
+
       <!-- 分页 -->
       <el-pagination
         :current-page="page"
@@ -152,55 +93,13 @@
         @current-change="getPublicPageList"
       />
         </section>
-      </div>
-      <el-backtop></el-backtop>
-
-      <!-- 网校名师 开始 -->
-      <div>
-        <section class="container">
-          <header class="comm-title">
-            <h2 class="tac">
-              <span class="c-333">名师大咖</span>
-            </h2>
-          </header>
-          <div>
-            <article class="i-teacher-list">
-              <ul class="of">
-                <li v-for="(teacher, index) in teacherList" v-bind:key="index">
-                  <section class="i-teach-wrap">
-                    <div class="i-teach-pic">
-                      <a :href="'/teacher/' + teacher.id" :title="teacher.name">
-                        <img :alt="teacher.name" :src="teacher.avatar" />
-                      </a>
-                    </div>
-                    <div class="mt10 hLh30 txtOf tac">
-                      <a
-                        :href="'/teacher/' + teacher.id"
-                        :title="teacher.name"
-                        class="fsize18 c-666"
-                        >{{ teacher.name }}</a
-                      >
-                    </div>
-                    <div class="hLh30 txtOf tac">
-                      <span class="fsize14 c-999">{{ teacher.intro }}</span>
-                    </div>
-                    <div class="mt15 i-q-txt">
-                      <p class="c-999 f-fA">{{ teacher.career }}</p>
-                    </div>
-                  </section>
-                </li>
-              </ul>
-              <div class="clear"></div>
-            </article>
-            <section class="tac pt20">
-              <a href="/teacher" title="全部讲师" class="comm-btn c-btn-2"
-                >全部讲师</a
-              >
-            </section>
-          </div>
+        <section class="tac pt20">
+          <a href="/source" title="全部资源" class="comm-btn c-btn-2"
+            >全部资源</a
+          >
         </section>
       </div>
-      <!-- /网校名师 结束 -->
+      <el-backtop></el-backtop>
     </div>
   </div>
 </template>
@@ -228,8 +127,6 @@ export default {
       limit: 10, // 每页记录数
       searchObj: {},// 查询条件、
       bannerList: {},
-      teacherList: {},
-      courseList: {},
       sourceList: [],
 
     };
@@ -240,7 +137,7 @@ export default {
     // this.initDataObj();
 
   },
-  methods: {      
+  methods: {
     //首页显示公开资源
     getPublicPageList(page=1) {
         this.page = page
@@ -254,17 +151,9 @@ export default {
     initDataBanner() {
       banner.getList().then((response) => {
         this.bannerList = response.data.data.bannerList;
-      });     
-    },
-
-
-    //首页显示课程和名师数据
-    initDataObj() {
-      index.getList().then((response) => {
-        this.teacherList = response.data.data.teacherList;
-        this.courseList = response.data.data.eduList;
       });
     },
+
   },
 };
 </script>

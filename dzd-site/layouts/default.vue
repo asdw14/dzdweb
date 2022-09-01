@@ -1,5 +1,6 @@
 <template>
   <div class="in-wrap">
+    <no-ssr>
     <!-- 公共头引入 -->
     <header id="header">
       <section class="container">
@@ -10,21 +11,21 @@
         </h1>
         <div class="h-r-nsl">
           <ul class="nav">
-            <router-link to="/" tag="li" active-class="current" exact>
+            <nuxt-link to="/" tag="li" active-class="current" exact>
               <a>首页</a>
-            </router-link>
-            <router-link to="/course" tag="li" active-class="current">
+            </nuxt-link>
+            <nuxt-link to="/source" tag="li" active-class="current">
               <a>资源</a>
-            </router-link>
-            <router-link to="/article" tag="li" active-class="current">
+            </nuxt-link>
+            <nuxt-link to="/article" tag="li" active-class="current">
               <a>文章</a>
-            </router-link>
-            <router-link to="/qa" tag="li" active-class="current">
-              <a>问答</a>
-            </router-link>
-            <router-link to="/teacher" tag="li" active-class="current">
+            </nuxt-link>
+            <nuxt-link to="/netdisk" tag="li" active-class="current">
+              <a>云空间</a>
+            </nuxt-link>
+            <nuxt-link to="/teacher" tag="li" active-class="current">
               <a>个人主页</a>
-            </router-link>
+            </nuxt-link>
           </ul>
  <!-- / nav -->
 <ul class="h-r-login">
@@ -76,10 +77,12 @@
         <div class="clear"></div>
       </section>
     </header>
+    </no-ssr>
     <!-- /公共头引入 -->
-      
-    <nuxt/>
+  <no-ssr>
 
+    <nuxt/>
+</no-ssr>
     <!-- 公共底引入 -->
     <footer id="footer">
       <section class="container">
@@ -141,7 +144,7 @@ import '~/assets/css/nice_select.css'
 import '~/assets/css/order.css'
 import '~/assets/css/swiper-3.3.1.min.css'
 import "~/assets/css/pages-weixinpay.css"
-  
+
 
 import cookie from 'js-cookie'
 import userApi from '@/api/login'
@@ -184,8 +187,8 @@ export default {
 
     logout() {
       //debugger
-      cookie.set('dzd_ucenter', "", {domain: 'localhost'})
-      cookie.set('dzd_token', "", {domain: 'localhost'})
+      cookie.set('dzd_ucenter', "", {domain: '192.168.169.1'})
+      cookie.set('dzd_token', "", {domain: '192.168.169.1'})
 
       //跳转页面
       window.location.href = "/"
@@ -193,13 +196,13 @@ export default {
     wxLogin() {
       if (this.token == '') return
       //把token存在cookie中、也可以放在localStorage中
-      cookie.set('dzd_token', this.token, {domain: 'localhost'})
-      cookie.set('dzd_ucenter', '', {domain: 'localhost'})
+      cookie.set('dzd_token', this.token, {domain: '192.168.169.1'})
+      cookie.set('dzd_ucenter', '', {domain: '192.168.169.1'})
       //登录成功根据token获取用户信息
       userApi.getLoginInfo().then(response => {
         this.loginInfo = response.data.data.item
         //将用户信息记录cookie
-        cookie.set('dzd_ucenter', JSON.stringify(response.data.data.item), {domain: 'localhost'})
+        cookie.set('dzd_ucenter', JSON.stringify(response.data.data.item), {domain: '192.168.169.1'})
       })
     }
   }
