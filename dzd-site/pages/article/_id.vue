@@ -171,7 +171,7 @@
         </div>
       </el-col>
       <el-col :span="1" style="padding: 100px 12px">
-        <el-button type="success" plain size="small" @click="commentPush()"
+        <el-button type="success" plain size="small" @click="commentPush(articleInfo.id)"
           >评论</el-button
         >
       </el-col>
@@ -229,8 +229,8 @@
       <el-row :gutter="20">
         <el-col :span="5" offset="1" style="color: #777777; margin-top: 12px ">
           回复于：{{
-            articleInfo.gmtCreate != null
-              ? articleInfo.gmtCreate.substr(0, 16)
+            comment.gmtCreate != null
+              ? comment.gmtCreate.substr(0, 16)
               : "1970-11-11 11:11 "
           }}</el-col>
         <!-- 点赞回复 -->
@@ -271,17 +271,15 @@
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 3, maxRows: 7 }"
-                  placeholder="请输入内容"
+                  placeholder="请输入评论内容..."
                   v-model="commentInfo.content"
                 >
                 </el-input>
-                {{ commentInfo.parentId }}
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="commentPush()"
-                  >确 定</el-button
-                >
+                  >确 定</el-button>
               </div>
             </el-dialog>
           </div>
@@ -338,8 +336,8 @@
           <!--        回复日期-->
           <el-col :span="6" offset="1" style="color: #777777; ">
             回复于：{{
-              articleInfo.gmtCreate != null
-                ? articleInfo.gmtCreate.substr(0, 16)
+              commentChildren.gmtCreate != null
+                ? commentChildren.gmtCreate.substr(0, 16)
                 : "1970-11-11 11:11 "
             }}</el-col>
           <!-- 点赞回复 -->
@@ -450,7 +448,7 @@ export default {
     },
 
     //帖子评论通用
-    commentPush() {
+    commentPush(articleId) {
       //关闭弹窗
       this.dialogFormVisible = false;
       this.dialogFormVisible2 = false;
@@ -466,6 +464,10 @@ export default {
       //需要先登录才能评论
       const flag = this.isLongin();
       if (flag == true) {
+        if (articleId !=""&& articleId != null){
+          this.commentInfo.parentId = articleId;
+        }
+
         if (this.commentInfo.parentId == "" || this.commentInfo.parentId == null) {
           this.commentInfo.articleId = this.commentInfo.parentId;
         }
@@ -477,6 +479,7 @@ export default {
               type: "success",
               message: response.data.message,
             });
+            this.commentInfo = {}
           })
           .catch((response) => {
             this.$message({

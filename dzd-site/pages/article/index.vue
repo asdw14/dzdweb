@@ -159,7 +159,6 @@
 
 </template>
 <script>
-import '~/assets/font/font.css'
 import article from '@/api/article'
 import subject from '@/api/subject'
 
