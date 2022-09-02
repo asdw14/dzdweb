@@ -4,11 +4,13 @@ module.exports = {
   */
   plugins: [
     { src: '~/plugins/nuxt-swiper-plugin.js', ssr: true }
+    ,{ src: '~/plugins/vueMarkdown'}
     ,{src:'~/plugins/swiper',ssr:false}
+
   ],
 
   css: [
-    'swiper/dist/css/swiper.css', 
+    'swiper/dist/css/swiper.css',
   ],
   server:{
     port:3000
