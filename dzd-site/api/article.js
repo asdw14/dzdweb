@@ -19,4 +19,14 @@ export default {
     })
   },
 
+  //发布或保存帖子
+  saveOrPush(articleInfo){
+    return request({
+      url : `${api_name}/saveOrPush`,
+      method: 'post',
+      data : articleInfo
+    })
+
+  },
+
 }
