@@ -40,6 +40,7 @@
       :boxShadow="true"
       toolbarsBackground="#3FACEA"
       :scrollStyle="true"
+      fontSize="16px"
       style="z-index:1;border: 1px solid #d9d9d9;height:50vh"
       v-model="articleInfo.content"
       :toolbars="toolbars"
@@ -227,15 +228,26 @@ export default {
       this.articleInfo.html = this.$refs.md.d_render;  //html
       this.articleInfo.markdown = this.$refs.md.d_value; //md
       article.saveOrPush(this.articleInfo).then((response) =>{
-        this.$message({
-          type: 'success',
-          message: '保存成功 ^_^ '
-        })
-        this.$router.push({ path: '/article' })
+        // if (response.data.code==20001){
+        //   this.$message({
+        //     type: 'success',
+        //     message: response.code
+        //   })
+        //   this.$router.push({ path: '/login' })
+        // }
+
+        if (response.data.code==20000){
+          this.$message({
+            type: 'success',
+            message: '保存成功 ^_^ '
+          })
+        }
+
       }).catch((response) => {
+        this.$router.push({ path: '/login' })
         this.$message({
           type: 'error',
-          message: response.message
+          message: response.code.message
         })
       })
       this.saveBtnDisabled = false
@@ -262,15 +274,17 @@ export default {
       this.articleInfo.markdown = this.$refs.md.d_value; //md
       this.articleInfo.status = "Normal"
       article.saveOrPush(this.articleInfo).then(response =>{
-        this.$message({
-          type: 'success',
-          message: '发布成功 ^_^ '
-        })
+        if (response.data.code==20000){
+          this.$message({
+            type: 'success',
+            message: '发布成功 ^_^ '
+          })
+        }
         this.$router.push({ path: '/article' })
       }).catch((response) => {
         this.$message({
           type: 'error',
-          message: response.message
+          message: response.data.message
         })
       })
       this.saveBtnDisabled = false

@@ -9,5 +9,17 @@ export default {
       method: 'post',
       data : searchObj
     })
-  }
+  },
+
+  //上传图片用的，返回URL
+  async uploadContentImg(file) {
+    return request({
+      url: `/api/oss/file/upload`,
+      method: 'post',
+      data : file
+    })
+  },
+
+
+
 }
