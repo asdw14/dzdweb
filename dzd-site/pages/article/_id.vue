@@ -137,8 +137,10 @@
       </div>
       <el-col :span="2" :offset="22">
         <div style="font-size: 18px">
-          <el-button icon="el-icon-caret-top" size="small" circle></el-button>
-          <b>赞同</b>
+          <el-button v-if="articleInfo.starIs" icon="el-icon-caret-top" size="small" circle @click="articleStar" type="primary"></el-button>
+          <el-button v-else icon="el-icon-caret-top" size="small" circle @click="articleStar"></el-button>
+          <b v-if="articleInfo.starIs" style="color: #3580DE">已赞同</b>
+          <b v-else>赞同</b>
         </div>
       </el-col>
     </el-row>
@@ -519,6 +521,31 @@ export default {
       }
     },
 
+    //帖子点赞
+    articleStar(){
+      //验证登陆
+      var user = cookie.get("dzd_ucenter");
+      if (user == null || user == "") {
+        this.$message({
+          showClose: true,
+          message: "您还未进行登录，登录后可评论！3秒后自动跳转至登录页",
+          type: "error",
+        });
+        return
+      }
+      //点赞或撤销点赞改变状态
+      if(this.articleInfo.id!=null && this.articleInfo.id != ""){
+        article.articleStar(this.articleInfo.id).then((response) => {
+          this.articleInfo.starIs = response.data.data.starIs
+        }).catch((response) => {
+          this.$message({
+            type: 'error',
+            message: response.data.message
+          })
+        });
+
+      }
+    },
 
     //评论点赞
     commentStar(e,id){

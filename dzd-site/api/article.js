@@ -26,7 +26,14 @@ export default {
       method: 'post',
       data : articleInfo
     })
-
   },
+
+  //帖子点赞撤销通用
+  articleStar(articleId){
+    return request({
+      url : `${api_name}/articleStar/${articleId}`,
+      method: 'put',
+    })
+  }
 
 }
