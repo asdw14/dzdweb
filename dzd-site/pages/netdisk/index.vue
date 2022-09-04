@@ -122,7 +122,6 @@
             </div>
 
 
-
           </template>
         </el-table-column>
 
@@ -231,10 +230,13 @@
               <el-link type="primary" @click="getMemberSourceByDirectory(scope.row.id)">打开</el-link>
             </div>
           </template>
-
         </el-table-column>
+
+<!--    删除资源或文件夹    -->
         <el-table-column fixed="right" width="40">
-          <el-button size="mini" type="danger" icon="el-icon-delete" circle></el-button>
+          <template slot-scope="scope">
+            <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="deleteSource(scope.row.id)"></el-button>
+          </template>
         </el-table-column>
       </el-table>
 
@@ -377,6 +379,37 @@ export default {
       }
       return true;
     },
+
+  //  删除资源或文件夹
+    deleteSource(id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        source.deleteSource(id).then((response) => {
+
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+          //重新显示数据
+          this.getMemberSourceByDirectory(this.currentDirectoryId)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        });
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+
+
   }
 }
 </script>

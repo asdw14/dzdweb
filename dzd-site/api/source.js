@@ -20,6 +20,33 @@ export default {
     })
   },
 
+  //新建文件夹
+  createDirectory(directoryVo) {
+    return request({
+      url: `${api_name}/createDirectory`,
+      method: 'post',
+      data : directoryVo
+    })
+  },
+
+  //根据文件夹id获取个人资源
+  getMemberSourceByDirectoryId(id,searchObj) {
+    return request({
+      url: `${api_name}/getMemberSourceByDirectoryId/${id}`,
+      method: 'post',
+      data : searchObj
+    })
+  },
+
+  //删除个人资源，文件或文件夹
+  deleteSource(id,searchObj) {
+    return request({
+      url: `${api_name}/deleteSource/${id}`,
+      method: 'delete',
+    })
+  },
+
+
 
 
 }
