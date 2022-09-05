@@ -29,6 +29,15 @@ export default {
     })
   },
 
+  //上传公共资源
+  uploadPublicSource(file,sourceName,price){
+    return request({
+      url: `${api_name}/uploadSource`,
+      method: 'post',
+      params : file
+    })
+  },
+
   //根据文件夹id获取个人资源
   getMemberSourceByDirectoryId(id,searchObj) {
     return request({
@@ -46,7 +55,13 @@ export default {
     })
   },
 
-
+  //下载文件增加下载次数
+  downSource(id){
+    return request({
+      url: `${api_name}/getOssUrl/${id}`,
+      method: 'post',
+    })
+  }
 
 
 }
