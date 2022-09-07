@@ -18,12 +18,12 @@
               <a>资源</a>
             </nuxt-link>
             <nuxt-link to="/article" tag="li" active-class="current">
-              <a>文章</a>
+              <a>交流求助</a>
             </nuxt-link>
             <nuxt-link to="/netdisk" tag="li" active-class="current">
               <a>云空间</a>
             </nuxt-link>
-            <nuxt-link to="/teacher" tag="li" active-class="current">
+            <nuxt-link to="/userInfo" tag="li" active-class="current">
               <a>个人主页</a>
             </nuxt-link>
           </ul>
