@@ -3,7 +3,7 @@
     <no-ssr>
     <!-- 公共头引入 -->
     <header id="header">
-      <section class="container">
+      <section class="container" style="width: 85%">
         <h1 id="logo">
           <a href="#" title="弟中弟共享云">
             <img src="~/assets/img/logo.png" width="100%" alt="弟中弟共享云">
