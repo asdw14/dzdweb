@@ -265,9 +265,9 @@
 
               <template slot-scope="scope">
                 <div v-if="scope.row.isDirectory == 0">
-                  <a :href="scope.row.sourceOssUrl" download="" @click="downSource(scope.row.id)">
+                  <a download="" @click="downSource(scope.row.id)">
                     <el-button size="mini" type="success" icon="el-icon-download" circle></el-button>
-                  </a>
+                  </a >
                 </div>
                 <!--            <div v-else>-->
                 <!--              <el-link type="primary" @click="getMemberSourceByDirectory(scope.row.id)">打开</el-link>-->
@@ -301,6 +301,7 @@
 import banner from "@/api/banner";
 import index from "@/api/index";
 import source from "@/api/source";
+import cookie from "js-cookie";
 export default {
   data() {
     return {
@@ -340,6 +341,32 @@ export default {
             });
     },
 
+    //下载文件
+    downSource(id){
+      //登录后才可
+      if (this.isLongin()!=false){
+        source.downSource(id)
+      }
+    },
+
+    //判断是否已登录
+    isLongin() {
+      //debugger
+      var user = cookie.get("dzd_ucenter");
+      if (user == null || user == "") {
+        this.$message({
+          showClose: true,
+          message: "您还未登录哦，请先登录再进行下载^_^",
+          type: "error",
+        });
+
+        // 3秒后执行跳转至登录页
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      }
+      return true;
+    },
     //显示banner
     initDataBanner() {
       banner.getList().then((response) => {
