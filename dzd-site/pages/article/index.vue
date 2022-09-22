@@ -1,59 +1,70 @@
 <template>
-    <section class="container">
+    <section class="container" style="width: 95%">
       <br />
 <!--查询表单-->
 <el-form :inline="true" class="demo-form-inline">
     &emsp;    &emsp;
   <!-- 所属分类：级联下拉列表 -->
   <!-- 一级分类 -->
-  <el-form-item label="文章类别: " style="border-radius: 30px; ">
-    <el-select
-      v-model="searchObj.subjectParentId"
-      placeholder="选择分类大类"
-      @change="subjectLevelOneChanged"
-      size="small">
-      <el-option
-        v-for="subject in subjectNestedList"
-        :key="subject.id"
-        :label="subject.title"
-        :value="subject.id"/>
-    </el-select>
+<!--  <el-form-item label="文章类别: " style="border-radius: 30px; margin-left: 2%">-->
+<!--    <el-select-->
+<!--      v-model="searchObj.subjectParentId"-->
+<!--      placeholder="选择分类大类"-->
+<!--      @change="subjectLevelOneChanged"-->
+<!--      size="small">-->
+<!--      <el-option-->
+<!--        v-for="subject in subjectNestedList"-->
+<!--        :key="subject.id"-->
+<!--        :label="subject.title"-->
+<!--        :value="subject.id"/>-->
+<!--    </el-select>-->
 
-    <!-- 二级分类 -->
-    <el-select v-model="searchObj.subjectId" placeholder="选择分类小类" style="width: 150px;" size="small">
-      <el-option
-        v-for="subject in subSubjectList"
-        :key="subject.id"
-        :label="subject.title"
-        :value="subject.id"/>
-    </el-select>
-  </el-form-item>
+<!--    &lt;!&ndash; 二级分类 &ndash;&gt;-->
+<!--    <el-select v-model="searchObj.subjectId" placeholder="选择分类小类" style="width: 150px;" size="small">-->
+<!--      <el-option-->
+<!--        v-for="subject in subSubjectList"-->
+<!--        :key="subject.id"-->
+<!--        :label="subject.title"-->
+<!--        :value="subject.id"/>-->
+<!--    </el-select>-->
+<!--  </el-form-item>-->
 
-    <!-- 标题 -->
-    <el-form-item style="border-radius: 30px">
-        <el-input v-model="searchObj.title" placeholder="想搜索的文章" style="border-radius: 30px; width: 180px;"/>
-    </el-form-item>
     &emsp;
 <!--    <el-radio v-model="searchObj.isFree" label="true" style="color: #303030;"><b>只看免费</b></el-radio>
  -->
-    <el-switch
-      v-model="searchObj.isFree"
-      inactive-text="只看免费">
-    </el-switch>
+<!--    <el-switch-->
+<!--      v-model="searchObj.isFree"-->
+<!--      inactive-text="只看免费">-->
+<!--    </el-switch>-->
     &emsp;
-    <el-switch
-      v-model="searchObj.ishot"
-      inactive-text="根据热度排序">
-    </el-switch>
+<!--    <el-switch-->
+<!--      v-model="searchObj.ishot"-->
+<!--      inactive-text="根据热度排序">-->
+<!--    </el-switch>-->
+
+  <!-- 标题 -->
+  <el-form-item style="border-radius: 30px; margin-left: 50%">
+    <input v-model="searchObj.title"
+           style="border-radius: 15px;  width: 130px;
+            height: 28px;  border-color: #3399ff;
+            padding-left: 10px; " type="text"
+           placeholder="输入想搜索的帖子"
+
+    />
+
+  </el-form-item>
     <el-button type="primary" icon="el-icon-search" @click="getArticleList()" style="border-radius: 30px" size="small">查询</el-button>
 
     <el-button type="default" @click="resetData()" style="border-radius: 30px" size="small">清空</el-button>
 
+  <nuxt-link to="./write">
+  <el-button type="success" size="medium" round="true" style="margin-right: 5%"><i class="el-icon-edit el-icon--left" ></i>我要发帖</el-button>
+  </nuxt-link>
 
     </el-form>
 
 <!-- 帖子列表 -->
-        <el-card class="box-card"  shadow="always" v-for="article in Articlelist" :key="article.id">
+        <el-card class="box-card"  shadow="always" v-for="article in Articlelist" :key="article.id" style="width: 70%">
             <!-- 标题 -->
             <el-row >
 
@@ -136,7 +147,7 @@
 
         </el-card>
         <div style="text-align: center;">
-          <el-button type="success" round @click="getNextPageList()" style="width: 500; margin: 10px 10px;">点击加载更多</el-button>
+          <el-button type="success" round @click="getNextPageList()" style=" margin: 10px 10px;">点击加载更多</el-button>
          </div>
         <!-- 回到最顶 -->
             <el-backtop :bottom="100">
@@ -246,5 +257,11 @@ export default {
         font-family:"楷体";
     }
 
+  input::-webkit-input-placeholder {
+    /* placeholder颜色 */
+    color: #aab2bd;
+    /* placeholder字体大小 */
+    font-size: 13px;
+  }
 
 </style>
