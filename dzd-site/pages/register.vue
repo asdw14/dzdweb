@@ -29,7 +29,7 @@
             <i class="iconfont icon-phone"/>
           </div>
           <div class="btn" style="position:absolute;right: 0;top: 6px;width: 40%;">
-            <a href="javascript:" type="button" @click="getCodeFun()" :value="codeTest" style="border: none;background-color: none">{{codeTest}}</a>
+            <a href="javascript:" type="button" @click="getCodeFun()" :value="codeTest" style="border: none;">{{codeTest}}</a>
           </div>
         </el-form-item>
 
@@ -55,7 +55,7 @@
       <div class="more-sign">
         <h6>社交帐号直接注册</h6>
         <ul>
-          <li><a id="weixin" class="weixin" target="_blank" href="http://huaan.free.idcfengye.com/api/ucenter/wx/login"><i
+          <li><a id="weixin" class="weixin" target="_blank" href="http://localhost:8160/api/ucenter/wx/login"><i
             class="iconfont icon-weixin"/></a></li>
           <li><a id="qq" class="qq" target="_blank" href="#"><i class="iconfont icon-qq"/></a></li>
         </ul>
@@ -85,7 +85,16 @@
         codeTest: '获取验证码'
       }
     },
+    created() {
+      // this.open()
+    },
     methods: {
+      open() {
+        this.$alert('注册通道咱叔关闭，请使用微信扫码登录', '注册通道咱叔关闭，请使用微信扫码登录', {
+          confirmButtonText: '确定',
+
+        });
+      },
       getCodeFun() {
         //sending = false
         //his.sending原为true,请求成功，!this.sending == true，主要是防止有人把disabled属性去掉，多次点击；
@@ -135,7 +144,7 @@
 
       checkPhone (rule, value, callback) {
         //debugger
-        if (!(/^1[34578]\d{9}$/.test(value))) {
+        if (!(/^1[345789]\d{9}$/.test(value))) {
           return callback(new Error('手机号码格式不正确'))
         }
         return callback()

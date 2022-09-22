@@ -63,10 +63,13 @@
           <aside class="h-r-search">
             <form action="#" method="post">
               <label class="h-r-s-box">
-                <input type="text" placeholder="输入你想找的资源" name="queryCourse.courseName" value>
-                <button type="submit" class="s-btn">
-                  <em class="icon18">&nbsp;</em>
-                </button>
+                <input type="text" placeholder="输入你想找的资源" v-model="courseName" value >
+
+                    <button type="submit" class="s-btn">
+                      <a  @click="search">
+                        <em class="icon18">&nbsp;</em>
+                      </a>
+                    </button>
               </label>
             </form>
           </aside>
@@ -153,6 +156,7 @@ export default {
   data() {
     return {
       token: '',
+      courseName:'',
       loginInfo: {
         id: '',
         age: '',
@@ -204,6 +208,10 @@ export default {
         //将用户信息记录cookie
         cookie.set('dzd_ucenter', JSON.stringify(response.data.data.item), {domain: '192.168.169.1'})
       })
+    },
+
+    search(){
+      this.$router.push('/source' )
     }
   }
 }

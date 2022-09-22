@@ -65,15 +65,15 @@
               // if(response.data.success){
 
                 //把token存在cookie中、也可以放在localStorage中
-                
-                cookie.set('dzd_token', response.data.data.token, { domain: 'localhost' })
+
+                cookie.set('dzd_token', response.data.data.token, { domain: '192.168.169.1' })
                 //登录成功根据token获取用户信息
                 loginApi.getLoginInfo().then(response => {
-                  
+
                   this.loginInfo = response.data.data.item
                   //将用户信息记录cookie
-                  cookie.set('dzd_ucenter',JSON.stringify(response.data.data.item) ,{domain: 'localhost'})
-                //   cookie.set('dzd_ucenter', this.loginInfo, { domain: 'localhost' })
+                  cookie.set('dzd_ucenter',JSON.stringify(response.data.data.item) ,{domain: '192.168.169.1'})
+                //   cookie.set('dzd_ucenter', this.loginInfo, { domain: '192.168.169.1' })
                   //跳转页面
                   window.location.href = "/";
                 })
@@ -83,7 +83,7 @@
 
       checkPhone (rule, value, callback) {
         //debugger
-        if (!(/^1[34578]\d{9}$/.test(value))) {
+        if (!(/^1[345789]\d{9}$/.test(value))) {
           return callback(new Error('手机号码格式不正确'))
         }
         return callback()
