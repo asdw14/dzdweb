@@ -314,9 +314,9 @@
                 <el-button size="mini" type="success" icon="el-icon-download" circle></el-button>
               </a >
             </div>
-<!--            <div v-else>-->
-<!--              <el-link type="primary" @click="getMemberSourceByDirectory(scope.row.id)">打开</el-link>-->
-<!--            </div>-->
+            <!--            <div v-else>-->
+            <!--              <el-link type="primary" @click="getMemberSourceByDirectory(scope.row.id)">打开</el-link>-->
+            <!--            </div>-->
           </template>
         </el-table-column>
 
@@ -400,13 +400,23 @@ export default {
     },
 
 
-    //下载文件
+  //下载文件
     downSource(id){
       //登录后才可
       if (this.isLongin()!=false){
-        source.downSource(id)
+        source.downSource(id).then((response) => {
+          var url = response.data.data.url
+          window.open(url);
+          var mes = response.data.message
+          this.$message({
+            showClose: true,
+            message: mes,
+            type: "success",
+          });
+        });
       }
     },
+
 
     //判断是否已登录
     isLongin() {
