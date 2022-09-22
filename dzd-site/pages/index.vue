@@ -345,7 +345,16 @@ export default {
     downSource(id){
       //登录后才可
       if (this.isLongin()!=false){
-        source.downSource(id)
+        source.downSource(id).then((response) => {
+          var url = response.data.data.url
+          window.open(url);
+          var mes = response.data.message
+          this.$message({
+            showClose: true,
+            message: mes,
+            type: "success",
+          });
+        });
       }
     },
 
