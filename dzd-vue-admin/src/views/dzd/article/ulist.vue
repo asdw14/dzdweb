@@ -35,7 +35,7 @@
           type="date"
           placeholder="选择开始日期"
           value-format="yyyy-MM-dd"
-          
+
            />
       </el-form-item>
 
@@ -52,7 +52,7 @@
   <template size="mini">
     <el-radio v-model="searchObj.isLock" label="1" size="mini">已封禁</el-radio>
   <el-radio v-model="searchObj.isLock" label="0" size="mini" >未封禁</el-radio>
-  </template> 
+  </template>
   <el-button type="primary" icon="el-icon-search" @click="getPageList()" size="mini">查询</el-button>
   <el-button type="default" @click="resetData()" size="mini">清空</el-button>
 </el-form>
@@ -81,11 +81,11 @@
     <template slot-scope="scope">
       <router-link :to="'/dzd/user/list/' + scope.row.memberId">
       <div class="demo-type">
-        <div> 
+        <div>
           <el-avatar :src="scope.row.avatar"></el-avatar>
         </div>
       </div>
-      
+
         <!-- 用户昵称 -->
          <el-link type="primary">{{scope.row.nickname}}</el-link>
       </router-link>
@@ -94,20 +94,20 @@
   </el-table-column>
 
 
-  <el-table-column label="文章标题" width="300" align="center">
+  <el-table-column label="文章标题" >
     <template slot-scope="scope">
       <div class="info">
         <div class="title">
-          <a href="">{{ scope.row.title }}</a>
+          <a @click="showArticle(scope.row.id)">{{ scope.row.title }}</a>
 
         </div>
       </div>
     </template>
   </el-table-column>
 
-  <el-table-column label="发布时间" align="center">
+  <el-table-column label="发布时间"  width="160" align="center">
     <template slot-scope="scope">
-      {{ scope.row.gmtModified.substr(0, 10) }}
+      {{ scope.row.gmtCreate.substr(0, 19) }}
     </template>
   </el-table-column>
 
@@ -115,7 +115,7 @@
   <el-table-column label="价格" width="100" align="center" >
     <template slot-scope="scope">
       {{ Number(scope.row.price) === 0 ? '免费' :
-      '¥' + scope.row.price.toFixed(2) }}
+      '$' + scope.row.price.toFixed(2) }}
     </template>
   </el-table-column>
   <el-table-column prop="buyCount" label="购买次数" width="100" align="center" >
@@ -123,7 +123,7 @@
       {{ scope.row.buyCount }}次
     </template>
   </el-table-column>
-  
+
     <el-table-column prop="buyCount" label="点赞量" width="100" align="center" >
     <template slot-scope="scope">
       {{ scope.row.praiseCount }}次
@@ -138,13 +138,32 @@
 
   <el-table-column label="操作" width="350" align="center">
     <template slot-scope="scope">
+      <el-link @click="showArticle(scope.row.id)" type="primary"><i class="el-icon-view  el-icon--left"/>查看</el-link>
 
-<!-- 修改文章浏览量、点赞量 -->
-        <el-button type="text" size="mini" icon ="el-icon-edit">暗箱操作</el-button>
+<!-- 修改文章浏览量、点赞量、购买量、价格 -->
+      <el-button type="text" size="mini" icon="el-icon-s-tools" @click="showOperation(scope.row.id)">暗箱操作
+      </el-button>
+
+      <el-dialog :visible.sync="dialogFormVisible" title="修改数据">
+        下载价格：<el-input-number v-model="operationVo.price" :min="0" :max="50"></el-input-number><br><br>
+        购买次数：<el-input-number v-model="operationVo.buyCount" :min="0" ></el-input-number><br><br>
+        点赞次数：<el-input-number v-model="operationVo.praiseCount" :min="0" ></el-input-number><br><br>
+        浏览次数：<el-input-number v-model="operationVo.viewCount" :min="0" ></el-input-number><br><br>
+
+
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="closeOperation">取 消</el-button>
+          <el-button type="primary" @click="operation">修 改</el-button>
+        </div>
+      </el-dialog>
+
+      <router-link :to="'/dzd/comment/list/' + scope.row.id" type="primary">
+        <el-button type="text" size="mini" icon="el-icon-s-tools">管理评论</el-button>
+        </router-link>
 
       <el-button type="text" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
-      <el-button type="text" size="mini" icon="el-icon-s-tools" @click="lockById(scope.row.id)">
-      {{scope.row.isLock == 0 ? "封禁" : "解封"}}  
+      <el-button type="text" size="mini" icon="el-icon-setting" @click="lockById(scope.row.id)">
+      {{scope.row.isLock == 0 ? "封禁" : "解封"}}
       </el-button>
     </template>
   </el-table-column>
@@ -161,7 +180,7 @@
 <el-backtop></el-backtop>
 
   </div>
-  
+
 </template>
 
 <script>
@@ -180,7 +199,9 @@ import subject from '@/api/dzd/subject'
             searchObj: {},// 查询条件、
             key :0,
             subjectNestedList: [], // 一级分类列表
-            subSubjectList: [] // 二级分类列表,
+            subSubjectList: [], // 二级分类列表,
+            operationVo: {},  //暗箱操作对象vo
+            dialogFormVisible :false,
           }
       },
       created(){
@@ -193,7 +214,7 @@ import subject from '@/api/dzd/subject'
             // 初始化分类列表
           this.initSubjectList()
         },
-    
+
         // 条件查询带分页
         getPageList(page=1){
           this.page = page
@@ -218,9 +239,64 @@ import subject from '@/api/dzd/subject'
                 this.subSubjectList = this.subjectNestedList[i].children
             }
         }
-    }, 
+    },
 
-//根据id修改封禁状态，封禁改为未封禁，未封禁改为封禁                 
+
+      // 暗箱操作修改数据
+      operation(){
+        if (this.operationVo.id != null){
+          article.operation(this.operationVo).then( (response) =>{
+            this.dialogFormVisible = false
+            //刷新页面
+            this.getPageList(this.page)
+
+            this.$message({
+              type: 'success',
+              message: response.message,
+            });
+          }).catch((response) => {
+            this.$message({
+              type: 'error',
+              message: response.message,
+            });
+          })
+        }
+      },
+
+      //显示修改数据页面
+      showOperation(id) {
+        article.getArticleInfoById(id).then((response) => {
+          this.operationVo.id = id
+          //浏览量
+          this.operationVo.viewCount = response.data.item.viewCount
+          //价格
+          this.operationVo.price = response.data.item.price
+          //购买数量
+          this.operationVo.buyCount = response.data.item.buyCount
+          //点赞
+          this.operationVo.praiseCount = response.data.item.praiseCount
+
+        });
+        this.dialogFormVisible = true
+      },
+
+      //关闭修改数据页面
+      closeOperation(){
+        this.operationVo.id = null
+        //点赞
+        this.operationVo.praiseCount = null
+        //价格
+        this.operationVo.price = null
+        //购买数量
+        this.operationVo.buyCount = null
+        //浏览量
+        this.operationVo.viewCount = null
+        this.dialogFormVisible = false
+
+      },
+
+
+//根据id修改封禁状态，封禁改为未封禁，未封禁改为封禁
     lockById(id){
         article.lockById(id).then(response =>{
             this.$message({
@@ -235,6 +311,12 @@ import subject from '@/api/dzd/subject'
             })
         })
     },
+
+      //查看文章内容
+      showArticle(id){
+        this.$router.push(`/dzd/article/id/${id}`)
+      },
+
 
       //清空
       resetData(){

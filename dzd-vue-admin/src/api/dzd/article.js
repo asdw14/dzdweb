@@ -15,12 +15,21 @@ export default {
 
     // 获取文章基本信息
     getArticleInfoById(id){
-        return request({                    
+        return request({
             url : `${api_name}/articleInfo/${id}`,
             method: 'get',
         })
 
     },
+
+  //暗箱操作数据
+  operation(operationVo){
+    return request({
+      url: `${api_name}/operation`,
+      method: 'put',
+      data : operationVo
+    })
+  },
 
     //修改文章信息
     updateArticleInfo(id,articleInfo){
@@ -32,7 +41,7 @@ export default {
 
     },
 
-      //根据id修改发布状态，发布改为未发布，未发布改为发布                 
+      //根据id修改发布状态，发布改为未发布，未发布改为发布
       statusById(id){
         return request({
             url: `${api_name}/statusById/${id}`,
@@ -40,10 +49,10 @@ export default {
           })
       },
 
-//根据id修改封禁状态，封禁改为未封禁，未封禁改为封禁                 
+//根据id修改封禁状态，封禁改为未封禁，未封禁改为封禁
       lockById(id){
         return request({
-            url: `${api_name}/lockById/${id}`,      
+            url: `${api_name}/lockById/${id}`,
             method: 'put'
           })
       },

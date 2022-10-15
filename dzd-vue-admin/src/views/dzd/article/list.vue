@@ -34,7 +34,7 @@
           type="date"
           placeholder="选择开始日期"
           value-format="yyyy-MM-dd"
-          
+
            />
       </el-form-item>
       <el-form-item>
@@ -53,7 +53,7 @@
   <template size="mini">
     <el-radio v-model="searchObj.status" label="Normal" size="mini">已发布</el-radio>
   <el-radio v-model="searchObj.status" label="Draft" size="mini" >未发布</el-radio>
-  </template> 
+  </template>
   <el-button type="primary" icon="el-icon-search" @click="getPageList()" size="mini">查询</el-button>
   <el-button type="default" @click="resetData()" size="mini">清空</el-button>
 </el-form>
@@ -76,61 +76,64 @@
       {{ (page - 1) * limit + scope.$index + 1 }}
     </template>
   </el-table-column>
-  <el-table-column label="发布人" align="center">
+  <el-table-column label="发布人" align="center"  width="80">
     <template slot-scope="scope">
           管理员
     </template>
   </el-table-column>
-  <el-table-column label="文章标题" width="300" align="center">
+  <el-table-column label="文章标题" align="center">
     <template slot-scope="scope">
       <div class="info">
         <div class="title">
           <a href="">{{ scope.row.title }}</a>
-          
+
         </div>
       </div>
 
     </template>
   </el-table-column>
 
-  <el-table-column label="发布时间" align="center">
+  <el-table-column label="发布时间" align="center"  width="120">
     <template slot-scope="scope">
       {{ scope.row.gmtModified.substr(0, 10) }}
     </template>
   </el-table-column>
 
-    <el-table-column label="发布状态" align="center">
+    <el-table-column label="发布状态" align="center"  width="80">
     <template slot-scope="scope">
       {{ scope.row.status == 'Normal' ? "已发布" : "未发布" }}
     </template>
   </el-table-column>
 
-  <el-table-column label="价格" width="100" align="center" >
+  <el-table-column label="价格" width="80" align="center" >
     <template slot-scope="scope">
       {{ Number(scope.row.price) === 0 ? '免费' :
       '$' + scope.row.price.toFixed(0) }}
     </template>
   </el-table-column>
-  <el-table-column prop="buyCount" label="购买次数" width="100" align="center" >
+  <el-table-column prop="buyCount" label="购买次数" width="70" align="center" >
     <template slot-scope="scope">
       {{ scope.row.buyCount }}次
     </template>
   </el-table-column>
 
-    <el-table-column prop="buyCount" label="浏览次数" width="100" align="center" >
+    <el-table-column prop="buyCount" label="浏览次数" width="70" align="center" >
     <template slot-scope="scope">
       {{ scope.row.viewCount }}次
     </template>
   </el-table-column>
 
-  <el-table-column label="操作" width="350" align="center">
+  <el-table-column label="操作" width="320" align="center">
     <template slot-scope="scope">
       <router-link :to="'/dzd/article/info/'+scope.row.id">
         <el-button type="text" size="mini" icon ="el-icon-edit">编辑文章信息</el-button>
       </router-link>
+      <router-link :to="'/dzd/comment/list/' + scope.row.id" type="primary">
+        <el-button type="text" size="mini" icon="el-icon-s-tools">管理评论</el-button>
+      </router-link>
       <el-button type="text" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
       <el-button type="text" size="mini" icon="el-icon-s-tools" @click="statusById(scope.row.id)">
-      {{scope.row.status == 'Draft' ? "上线文章" : "下线文章"}}  
+      {{scope.row.status == 'Draft' ? "上线文章" : "下线文章"}}
       </el-button>
     </template>
   </el-table-column>
@@ -176,7 +179,7 @@ import subject from '@/api/dzd/subject'
             // 初始化分类列表
           this.initSubjectList()
         },
-    
+
         // 条件查询带分页
         getPageList(page=1){
           this.page = page
@@ -201,7 +204,7 @@ import subject from '@/api/dzd/subject'
                 this.subSubjectList = this.subjectNestedList[i].children
             }
         }
-    }, 
+    },
 
     statusById(id){
         article.statusById(id).then(response =>{
