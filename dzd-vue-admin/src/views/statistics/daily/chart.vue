@@ -5,10 +5,15 @@
 
       <el-form-item>
         <el-select v-model="searchObj.type" clearable placeholder="请选择">
-          <el-option label="学员登录数统计" value="login_num"/>
-          <el-option label="学员注册数统计" value="register_num"/>
-          <el-option label="课程播放数统计" value="video_view_num"/>
-          <el-option label="每日课程数统计" value="course_num"/>
+          <el-option label="用户登录数统计" value="login_num"/>
+          <el-option label="用户注册数统计" value="register_num"/>
+          <el-option label="帖子浏览数统计" value="article_view_num"/>
+          <el-option label="资源下载数统计" value="source_down_num"/>
+
+          <el-option label="每日新增资源数统计" value="source_num"/>
+          <el-option label="每日新增帖子数统计" value="article_num"/>
+          <el-option label="每日新增评论数统计" value="comment_num"/>
+
         </el-select>
       </el-form-item>
 
@@ -36,11 +41,16 @@
     <div class="chart-container">
       <div id="chart" class="chart" style="height:500px;width:100%" />
     </div>
+
+    <div>
+      <div id="main" style="height:500px;width:100%" />
+    </div>
   </div>
 </template>
 <script>
-import echarts from 'echarts'
-import daily from '@/api/statistics/sta'
+import * as echarts from 'echarts';
+import daily from '@/api/statistics/sta';
+import user from '@/api/dzd/user';
 
 export default {
   data() {
@@ -54,16 +64,28 @@ export default {
       chart: null,
       title: '',
       xData: [],
-      yData: []
+      yData: [],
+      sex:{
+        sum : 0,
+        woman :0,
+        man: 0,
+      }
     }
   },
+
+  created() {
+    setTimeout(() => {
+      this.sexSts()
+    }, 200)
+  },
+
   methods: {
     showChart() {
       this.initChartData()
     },
 
     // 准备图表数据
-    initChartData() {   
+    initChartData() {
         daily.showChart(this.searchObj).then(response => {
              // 数据
             this.yData = response.data.dataList
@@ -71,21 +93,70 @@ export default {
             this.xData = response.data.dateList
              // 当前统计类别
             switch (this.searchObj.type) {
+
                 case 'register_num':
-                    this.title = '学员注册数统计'
+                    this.title = '用户注册数统计'
                     break
                 case 'login_num':
-                    this.title = '学员登录数统计'
+                    this.title = '用户登录数统计'
                     break
-                case 'video_view_num':
-                    this.title = '课程播放数统计'
+                case 'article_view_num':
+                    this.title = '帖子浏览数统计'
                     break
-                case 'course_num':
-                    this.title = '每日课程数统计'
+                case 'source_down_num':
+                    this.title = '资源下载数统计'
                     break
+                case 'source_num':
+                  this.title = '每日新增资源数统计'
+                  break
+                case 'article_num':
+                  this.title = '每日新增帖子数统计'
+                  break
+                case 'comment_num':
+                  this.title = '每日新增评论数统计'
+                  break
                 }
             this.setChart()
         })
+    },
+
+    //性别比例
+    sexSts() {
+
+      user.getSexSta().then(response => {
+        this.sum = response.data.sum
+        this.woman = response.data.woman
+        this.man = response.data.man
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+          series: [
+            {
+              type: 'pie',
+              stillShowZeroSum: false,
+              data: [
+                {
+                  value: this.woman,
+                  name: '女性用户'
+                },
+                {
+                  value: this.man,
+                  name: '男性用户'
+                },
+                {
+                  value: this.sum,
+                  name: '未知性别'
+                }
+              ]
+            }
+          ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+      })
+
     },
 
     // 设置图标参数
@@ -109,7 +180,8 @@ export default {
             // 系列中的数据内容数组
             data: this.yData,//-------绑定数据
             // 折线图
-            type: 'line'
+            type: 'line',
+          smooth: true
         }],
         title: {
             text: this.title
