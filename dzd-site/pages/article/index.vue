@@ -100,7 +100,7 @@
              <!-- 预览 -->
             <el-row>
                 <el-col :span="21" :offset="1">
-                    <p style="font-size:15px; color: #606266;">{{article.summary}}</p>
+                    <p style="font-size:15px; color: #606266;" v-html="article.summary"></p>
                     </el-col>
             </el-row>
 

@@ -70,6 +70,7 @@
 import source from '@/api/source';
 import subject from '@/api/subject';
 import article from '@/api/article'
+import cookie from "js-cookie";
 
 export default {
   name: "write",
@@ -130,6 +131,10 @@ export default {
   created() {
     //获取分类
     // this.initSubjectList()
+
+    //判断登录
+    this.isLongin()
+
   },
 
   methods: {
@@ -244,7 +249,6 @@ export default {
         }
 
       }).catch((response) => {
-        this.$router.push({ path: '/login' })
         this.$message({
           type: 'error',
           message: response.code.message
@@ -312,6 +316,25 @@ export default {
           this.subSubjectList = this.subjectNestedList[i].children
         }
       }
+    },
+
+    //判断是否已登录
+    isLongin() {
+      //debugger
+      var user = cookie.get("dzd_ucenter");
+      if (user == null || user == "") {
+        this.$message({
+          showClose: true,
+          message: "您还未进行登录，登录后可进行发帖！3秒后自动跳转至登录页",
+          type: "error",
+        });
+
+        // 3秒后执行跳转至登录页
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 3000);
+      }
+      return true;
     },
   }
 };
