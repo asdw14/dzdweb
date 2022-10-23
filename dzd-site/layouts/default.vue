@@ -15,10 +15,10 @@
               <a>首页</a>
             </nuxt-link>
             <nuxt-link to="/source" tag="li" active-class="current">
-              <a>资源</a>
+              <a>共享资源</a>
             </nuxt-link>
             <nuxt-link to="/article" tag="li" active-class="current">
-              <a>交流求助</a>
+              <a>交流社区</a>
             </nuxt-link>
             <nuxt-link to="/netdisk" tag="li" active-class="current">
               <a>云空间</a>

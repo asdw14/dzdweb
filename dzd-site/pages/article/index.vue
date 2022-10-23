@@ -4,20 +4,20 @@
 <!--查询表单-->
 <el-form :inline="true" class="demo-form-inline">
     &emsp;    &emsp;
-  <!-- 所属分类：级联下拉列表 -->
-  <!-- 一级分类 -->
-<!--  <el-form-item label="文章类别: " style="border-radius: 30px; margin-left: 2%">-->
-<!--    <el-select-->
-<!--      v-model="searchObj.subjectParentId"-->
-<!--      placeholder="选择分类大类"-->
-<!--      @change="subjectLevelOneChanged"-->
-<!--      size="small">-->
-<!--      <el-option-->
-<!--        v-for="subject in subjectNestedList"-->
-<!--        :key="subject.id"-->
-<!--        :label="subject.title"-->
-<!--        :value="subject.id"/>-->
-<!--    </el-select>-->
+<!--   所属分类：级联下拉列表-->
+<!--   一级分类-->
+  <el-form-item label="小圈子: " style="border-radius: 30px; margin-left: 10%">
+    <el-select
+      v-model="searchObj.subjectParentId"
+      placeholder="选择进入圈子"
+      @change="subjectLevelOneChanged"
+      size="small">
+      <el-option
+        v-for="subject in subjectNestedList"
+        :key="subject.id"
+        :label="subject.title"
+        :value="subject.id"/>
+    </el-select>
 
 <!--    &lt;!&ndash; 二级分类 &ndash;&gt;-->
 <!--    <el-select v-model="searchObj.subjectId" placeholder="选择分类小类" style="width: 150px;" size="small">-->
@@ -27,7 +27,7 @@
 <!--        :label="subject.title"-->
 <!--        :value="subject.id"/>-->
 <!--    </el-select>-->
-<!--  </el-form-item>-->
+  </el-form-item>
 
     &emsp;
 <!--    <el-radio v-model="searchObj.isFree" label="true" style="color: #303030;"><b>只看免费</b></el-radio>
@@ -43,7 +43,7 @@
 <!--    </el-switch>-->
 
   <!-- 标题 -->
-  <el-form-item style="border-radius: 30px; margin-left: 50%">
+  <el-form-item style="border-radius: 30px; margin-left: 20%">
     <input v-model="searchObj.title"
            style="border-radius: 15px;  width: 130px;
             height: 28px;  border-color: #3399ff;

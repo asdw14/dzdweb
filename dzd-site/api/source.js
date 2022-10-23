@@ -11,6 +11,15 @@ export default {
     })
   },
 
+  //主页分页查询获取公开资源
+  getPublicQueryPageList(page,limit,searchObj) {
+    return request({
+      url: `${api_name}/getPublicQueryPageList/${page}/${limit}`,
+      method: 'post',
+      data : searchObj
+    })
+  },
+
   //上传图片用的，返回URL
   async uploadContentImg(file) {
     return request({
